@@ -14,8 +14,13 @@ export const PersonalInformation = ({
   const {
     register,
     setValue,
+    watch,
     formState: { errors },
   } = useFormContext<ResumeData>();
+
+  const profilePicture = watch("personalInformation.profilePicture");
+
+  const personalInfoErrors = errors.personalInformation;
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] ?? null;
@@ -34,7 +39,7 @@ export const PersonalInformation = ({
       return;
     }
 
-    setValue("profilePicture", file, {
+    setValue("personalInformation.profilePicture", file, {
       shouldDirty: true,
       shouldValidate: true,
     });
@@ -47,8 +52,15 @@ export const PersonalInformation = ({
       <Typography variant="h6">Personal Information</Typography>
 
       {/* Profile Picture */}
-      <Stack>
-        <Avatar sx={{ width: 80, height: 80 }} />
+      <Stack spacing={1}>
+        <Avatar
+          src={
+            profilePicture instanceof File
+              ? URL.createObjectURL(profilePicture)
+              : undefined
+          }
+          sx={{ width: 80, height: 80 }}
+        />
 
         <Button component="label" variant="outlined">
           Upload Picture
@@ -64,31 +76,43 @@ export const PersonalInformation = ({
       <TextField
         label="Full Name"
         fullWidth
-        {...register("fullName", {
+        {...register("personalInformation.fullName", {
           required: "Full name is required",
         })}
-        error={!!errors.fullName}
-        helperText={errors.fullName?.message}
+        error={!!personalInfoErrors?.fullName}
+        helperText={personalInfoErrors?.fullName?.message}
       />
 
       <TextField
         label="Professional Title"
         fullWidth
-        {...register("jobTitle")}
+        {...register("personalInformation.jobTitle")}
       />
 
-      <TextField label="Email Address" fullWidth {...register("email")} />
+      <TextField
+        label="Email Address"
+        fullWidth
+        {...register("personalInformation.email")}
+      />
 
-      <TextField label="Phone Number" fullWidth {...register("phone")} />
+      <TextField
+        label="Phone Number"
+        fullWidth
+        {...register("personalInformation.phone")}
+      />
 
-      <TextField label="Address" fullWidth {...register("address")} />
+      <TextField
+        label="Address"
+        fullWidth
+        {...register("personalInformation.address")}
+      />
 
       <TextField
         label="Professional Summary"
         multiline
         rows={4}
         fullWidth
-        {...register("summary")}
+        {...register("personalInformation.summary")}
       />
     </Stack>
   );

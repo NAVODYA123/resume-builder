@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 import { TitleBar } from "../molecules/TitleBar";
+import { ProfilePicture } from "../molecules/ProfilePicture";
 
 type VerticalColumnTemplateProps = {
   name: string;
@@ -15,9 +16,27 @@ export const VerticalColumnTemplate = ({
 }: VerticalColumnTemplateProps) => {
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2, padding: 2 }}>
-      <TitleBar name={name} title={title} />
-      <Box>
-        <Box sx={{ width: "30%" }}>{leftContent}</Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+        }}
+      >
+        <ProfilePicture />
+        <TitleBar name={name} title={title} />
+      </Box>
+
+      <Box sx={{ display: "flex", flexDirection: "row", gap: 2, padding: 2 }}>
+        <Box
+          sx={{
+            width: "30%",
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+          }}
+        >
+          {leftContent}
+        </Box>
 
         <Box sx={{ width: "70%" }}>{rightContent}</Box>
       </Box>

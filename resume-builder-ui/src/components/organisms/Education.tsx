@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Divider, Typography } from "@mui/material";
 
 type EducationProps = {
   qualification: string;
@@ -9,13 +9,22 @@ type EducationProps = {
 export const Education = (props: EducationProps) => {
   return (
     <Box>
-      <Typography variant="h3" component="h2">
-        {props.qualification}
-      </Typography>
-      <Typography variant="h4" component="h3">
-        {props.institution}
-      </Typography>
-      <Typography variant="body2">{props.years}</Typography>
+      <Typography variant="h6"> Education</Typography>
+      <Divider sx={{ marginY: 1 }} />
+      {props.qualification && props.institution && props.years && (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 1,
+          }}
+        >
+          <Typography variant="body2">{props.qualification}</Typography>-
+          <Typography variant="body2">{props.institution}</Typography>-
+          <Typography variant="body2">{props.years}</Typography>
+        </Box>
+      )}
     </Box>
   );
 };

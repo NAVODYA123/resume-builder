@@ -1,6 +1,7 @@
 import { Box, Typography } from "@mui/material";
 
 type CustomLeftPanelListProps = {
+  key: string | number;
   title: string;
   items: string[];
 };

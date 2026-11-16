@@ -1,29 +1,62 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm, FormProvider, useWatch } from "react-hook-form";
+
 import { Box, Typography, Button } from "@mui/material";
 
 import { PersonalInformation } from "./PersonalInformation";
+import { WorkExperienceEditor } from "./WorkExperienceEditor";
+import { EducationEditor } from "./EducationEditor";
+
 import { VerticalColumnTemplate } from "../VerticalColumnTemplate";
+
 import type { ResumeData } from "@/types/resume.types";
+import { defaultResumeData } from "@/types/resume.types";
+
 import { ProfileSummary } from "@/components/molecules/ProfileSummary";
+import { ContactInfo } from "@/components/molecules/ContactInfo";
+
+import { WorkExperience } from "@/components/organisms/WorkExpirience";
+import { Education } from "@/components/organisms/Education";
+import { CustomLeftPanelItem } from "@/components/organisms/CustomLeftPanelItem";
+import { CustomRightPanelItem } from "@/components/organisms/CustomRightPanelItem";
 
 export const EditorTemplate = () => {
+  // Initialize the complete resume form
   const methods = useForm<ResumeData>({
-    defaultValues: {
-      fullName: "",
-      jobTitle: "",
-      email: "",
-      phone: "",
-      address: "",
-      summary: "",
-      profilePicture: null,
-    },
+    defaultValues: defaultResumeData,
   });
 
   const { control, handleSubmit } = methods;
 
-  const resumeData = useWatch({ control });
+  // Watch all resume data for live preview
+  // const resumeData = useWatch({ control });
 
+  const personalInfo = useWatch<ResumeData, "personalInformation">({
+    control,
+    name: "personalInformation",
+  });
+
+  const workExperience = useWatch<ResumeData, "workExperience">({
+    control,
+    name: "workExperience",
+  });
+
+  const education = useWatch<ResumeData, "education">({
+    control,
+    name: "education",
+  });
+
+  const customLeftPanelItem = useWatch<ResumeData, "customLeftPanelItem">({
+    control,
+    name: "customLeftPanelItem",
+  });
+
+  const customRightPanelItem = useWatch<ResumeData, "customRightPanelItem">({
+    control,
+    name: "customRightPanelItem",
+  });
+
+  // Profile picture preview
   const [imagePreview, setImagePreview] = useState<string>();
 
   // Handle profile picture selection
@@ -37,24 +70,34 @@ export const EditorTemplate = () => {
     });
   };
 
+  // Clean up image preview URL
+  useEffect(() => {
+    return () => {
+      if (imagePreview) {
+        URL.revokeObjectURL(imagePreview);
+      }
+    };
+  }, [imagePreview]);
+
+  // Submit complete resume
   const onSubmit = (data: ResumeData) => {
     console.log("Complete Resume:", data);
   };
-  ///remove after fix
-  console.log("Current Resume Data:", imagePreview);
+
+  // const personalInfo = resumeData.personalInformation;
 
   return (
     <FormProvider {...methods}>
       <Box
         sx={{
           display: "grid",
-          gridTemplateColumns: "40% 60%",
+          gridTemplateColumns: "30% 70%",
           gap: 3,
           p: 2,
           alignItems: "start",
         }}
       >
-        {/* LEFT COLUMN - INPUT FORMS */}
+        {/* LEFT COLUMN - EDITOR */}
         <Box
           component="form"
           onSubmit={handleSubmit(onSubmit)}
@@ -62,6 +105,7 @@ export const EditorTemplate = () => {
             display: "flex",
             flexDirection: "column",
             gap: 3,
+            // width: "40%",
           }}
         >
           <Typography variant="h5">Resume Editor</Typography>
@@ -70,25 +114,75 @@ export const EditorTemplate = () => {
             onProfilePictureChange={handleProfilePictureChange}
           />
 
+          <WorkExperienceEditor />
+
+          <EducationEditor />
+
           <Button type="submit" variant="contained">
             Save Resume
           </Button>
         </Box>
 
         {/* RIGHT COLUMN - LIVE RESUME PREVIEW */}
-        <Box>
+        <Box
+        // sx={{ width: "60%" }}
+        >
           <VerticalColumnTemplate
-            name={resumeData.fullName as string}
-            title={resumeData.jobTitle as string}
+            name={personalInfo?.fullName || ""}
+            title={personalInfo?.jobTitle || ""}
             leftContent={
-              <ProfileSummary summary={resumeData.summary as string} />
+              <Box>
+                <ProfileSummary summary={personalInfo?.summary || ""} />
+                <ContactInfo
+                  email={personalInfo?.email || ""}
+                  phone={personalInfo?.phone || ""}
+                  address={personalInfo?.address || ""}
+                />
+                {/* MULTIPLE CUSTOM LEFT PANEL LISTS */}
+                {customLeftPanelItem &&
+                  customLeftPanelItem?.map((item, index) => (
+                    <CustomLeftPanelItem
+                      key={index}
+                      title={item.title}
+                      items={item.items}
+                    />
+                  ))}
+              </Box>
             }
             rightContent={
               <Box>
-                <Typography variant="body2">{resumeData.email}</Typography>
-                <Typography variant="body2">{resumeData.phone}</Typography>
-                <Typography variant="body2">{resumeData.address}</Typography>
-                <Typography variant="body1">{resumeData.summary}</Typography>
+                {/* MULTIPLE WORK EXPERIENCES */}
+                {workExperience?.map((experience) => (
+                  <WorkExperience
+                    key={experience.id}
+                    years={experience.years}
+                    company={experience.company}
+                    position={experience.position}
+                    description={experience.description}
+                    techStack={experience.techstack.join(", ")}
+                  />
+                ))}
+
+                {/* MULTIPLE EDUCATION ENTRIES */}
+                {education?.map((item) => (
+                  <Education
+                    key={item.id}
+                    qualification={item.qualification}
+                    institution={item.institution}
+                    years={item.years}
+                  />
+                ))}
+                {/* MULTIPLE CUSTOM RIGHT PANEL ITEMS */}
+                {customRightPanelItem &&
+                  customRightPanelItem?.map((item, index) => (
+                    <CustomRightPanelItem
+                      key={index}
+                      title={item.title}
+                      subtitle={item.subtitle}
+                      years={item.years}
+                      content={item.content}
+                    />
+                  ))}
               </Box>
             }
           />

@@ -18,19 +18,6 @@ function App() {
   return (
     <Box sx={{ width: "100%", p: 3 }}>
       <EditorTemplate />
-      {/* <PersonalInformationForm onSubmit={handlePersonalInfoSubmit} /> */}
-
-      {/* {resumeData && (
-        <Box sx={{ mt: 4 }}>
-          <Typography variant="h6">Submitted Information</Typography>
-
-          <Typography>Name: {resumeData.fullName}</Typography>
-
-          <Typography>Email: {resumeData.email}</Typography>
-
-          <Typography>Job Title: {resumeData.jobTitle}</Typography>
-        </Box>
-      )} */}
     </Box>
   );
 }

@@ -1,14 +1,14 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Divider, Typography } from "@mui/material";
 
 type ProfileSummaryProps = {
   summary: string;
 };
 export const ProfileSummary = (props: ProfileSummaryProps) => {
   return (
-    <Box>
-      <Typography variant="h3" component="h2">
-        {props.summary}
-      </Typography>
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+      <Typography variant="h6">Profile</Typography>
+      <Divider sx={{ marginY: 1 }} />
+      <Typography variant="body2">{props.summary}</Typography>
     </Box>
   );
 };
