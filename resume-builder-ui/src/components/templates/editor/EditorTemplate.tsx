@@ -15,10 +15,11 @@ import { defaultResumeData } from "@/types/resume.types";
 import { ProfileSummary } from "@/components/molecules/ProfileSummary";
 import { ContactInfo } from "@/components/molecules/ContactInfo";
 
-import { WorkExperience } from "@/components/organisms/WorkExpirience";
-import { Education } from "@/components/organisms/Education";
 import { CustomLeftPanelItem } from "@/components/organisms/CustomLeftPanelItem";
-import { CustomRightPanelItem } from "@/components/organisms/CustomRightPanelItem";
+import { ResumeSection } from "@/components/organisms/ResumeSection";
+import { WorkExperienceContent } from "@/components/organisms/WorkExperienceContent";
+import { CustomRightPanelContent } from "@/components/organisms/CustomRightPanelContent";
+import { EducationContent } from "@/components/organisms/EducationContent";
 
 export const EditorTemplate = () => {
   // Initialize the complete resume form
@@ -105,7 +106,6 @@ export const EditorTemplate = () => {
             display: "flex",
             flexDirection: "column",
             gap: 3,
-            // width: "40%",
           }}
         >
           <Typography variant="h5">Resume Editor</Typography>
@@ -145,38 +145,26 @@ export const EditorTemplate = () => {
             }
             rightContent={
               <Box>
-                {/* MULTIPLE WORK EXPERIENCES */}
-                {workExperience?.map((experience) => (
-                  <WorkExperience
-                    key={experience.id}
-                    years={experience.years}
-                    company={experience.company}
-                    position={experience.position}
-                    description={experience.description}
-                    techStack={experience.techstack.join(", ")}
-                  />
-                ))}
+                {/* WORK EXPERIENCE */}
+                {workExperience?.length > 0 && (
+                  <ResumeSection title="Work Experience">
+                    <WorkExperienceContent experiences={workExperience} />
+                  </ResumeSection>
+                )}
 
-                {/* MULTIPLE EDUCATION ENTRIES */}
-                {education?.map((item) => (
-                  <Education
-                    key={item.id}
-                    qualification={item.qualification}
-                    institution={item.institution}
-                    years={item.years}
-                  />
+                {/* EDUCATION */}
+                {education?.length > 0 && (
+                  <ResumeSection title="Education">
+                    <EducationContent educations={education} />
+                  </ResumeSection>
+                )}
+
+                {/* CUSTOM RIGHT PANEL ITEMS */}
+                {customRightPanelItem?.map((item, index) => (
+                  <ResumeSection key={index} title={item.title}>
+                    <CustomRightPanelContent items={[item]} />
+                  </ResumeSection>
                 ))}
-                {/* MULTIPLE CUSTOM RIGHT PANEL ITEMS */}
-                {customRightPanelItem &&
-                  customRightPanelItem?.map((item, index) => (
-                    <CustomRightPanelItem
-                      key={index}
-                      title={item.title}
-                      subtitle={item.subtitle}
-                      years={item.years}
-                      content={item.content}
-                    />
-                  ))}
               </Box>
             }
           />

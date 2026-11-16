@@ -1,30 +1,23 @@
-import { Box, Divider, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
-type EducationProps = {
-  qualification: string;
-  institution: string;
-  years: string;
-};
+import type { ResumeData } from "@/types/resume.types";
 
-export const Education = (props: EducationProps) => {
+interface EducationProps {
+  education: ResumeData["education"];
+}
+
+export const Education = ({ education }: EducationProps) => {
   return (
     <Box>
-      <Typography variant="h6"> Education</Typography>
-      <Divider sx={{ marginY: 1 }} />
-      {props.qualification && props.institution && props.years && (
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            gap: 1,
-          }}
-        >
-          <Typography variant="body2">{props.qualification}</Typography>-
-          <Typography variant="body2">{props.institution}</Typography>-
-          <Typography variant="body2">{props.years}</Typography>
+      {education.map((item) => (
+        <Box key={item.id} sx={{ mb: 2 }}>
+          {item.qualification && <Typography>{item.qualification}</Typography>}
+
+          {item.institution && <Typography>{item.institution}</Typography>}
+
+          {item.years && <Typography variant="body2">{item.years}</Typography>}
         </Box>
-      )}
+      ))}
     </Box>
   );
 };

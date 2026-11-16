@@ -1,47 +1,129 @@
-import { useFormContext } from "react-hook-form";
+import { useFormContext, useFieldArray } from "react-hook-form";
 
-import { Stack, TextField, Typography } from "@mui/material";
+import type { UseFormRegister, FieldErrors } from "react-hook-form";
 
-import type { EducationData } from "@/types/resume.types";
+import {
+  Stack,
+  TextField,
+  Typography,
+  Button,
+  IconButton,
+  Divider,
+  Box,
+} from "@mui/material";
+
+import DeleteIcon from "@mui/icons-material/Delete";
+
+import type { ResumeData } from "@/types/resume.types";
+import { generateId } from "@/utils/generateId";
+
+interface EducationFieldsProps {
+  index: number;
+  register: UseFormRegister<ResumeData>;
+  errors: FieldErrors<ResumeData>;
+  onRemove: () => void;
+  canRemove: boolean;
+}
 
 export const EducationEditor = () => {
   const {
     register,
+    control,
     formState: { errors },
-  } = useFormContext<EducationData>();
+  } = useFormContext<ResumeData>();
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "education",
+  });
 
   return (
     <Stack spacing={3}>
       <Typography variant="h6">Education</Typography>
 
+      {fields.map((field, index) => (
+        <Box key={field.id}>
+          <EducationFields
+            index={index}
+            register={register}
+            errors={errors}
+            onRemove={() => remove(index)}
+            canRemove={fields.length > 1}
+          />
+
+          {index !== fields.length - 1 && <Divider sx={{ my: 3 }} />}
+        </Box>
+      ))}
+
+      <Button
+        variant="outlined"
+        onClick={() =>
+          append({
+            id: generateId(),
+            years: "",
+            qualification: "",
+            institution: "",
+          })
+        }
+      >
+        + Add Education
+      </Button>
+    </Stack>
+  );
+};
+
+// Individual education fields
+const EducationFields = ({
+  index,
+  register,
+  errors,
+  onRemove,
+  canRemove,
+}: EducationFieldsProps) => {
+  const educationErrors = errors.education?.[index];
+
+  return (
+    <Stack spacing={2}>
+      {canRemove && (
+        <Stack>
+          <IconButton
+            color="error"
+            onClick={onRemove}
+            aria-label="Remove education"
+          >
+            <DeleteIcon />
+          </IconButton>
+        </Stack>
+      )}
+
       <TextField
-        label="study duration"
+        label="Study Duration"
         fullWidth
-        {...register("years", {
+        {...register(`education.${index}.years`, {
           required: "Duration is required",
         })}
-        error={!!errors.years}
-        helperText={errors.years?.message}
+        error={!!educationErrors?.years}
+        helperText={educationErrors?.years?.message}
       />
 
       <TextField
-        label="qualification"
+        label="Qualification"
         fullWidth
-        {...register("qualification", {
+        {...register(`education.${index}.qualification`, {
           required: "Qualification is required",
         })}
-        error={!!errors.qualification}
-        helperText={errors.qualification?.message}
+        error={!!educationErrors?.qualification}
+        helperText={educationErrors?.qualification?.message}
       />
 
       <TextField
         label="Institution"
         fullWidth
-        {...register("institution", {
+        {...register(`education.${index}.institution`, {
           required: "Institution is required",
         })}
-        error={!!errors.institution}
-        helperText={errors.institution?.message}
+        error={!!educationErrors?.institution}
+        helperText={educationErrors?.institution?.message}
       />
     </Stack>
   );

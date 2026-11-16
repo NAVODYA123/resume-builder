@@ -1,4 +1,4 @@
-import { Box, Divider, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 type workDescription = {
   projectName: string;
@@ -17,12 +17,12 @@ type WorkExperienceProps = {
 export const WorkExperience = (props: WorkExperienceProps) => {
   return (
     <Box>
-      {props.position && props.company && (
+      {/* {props.position && props.company && (
         <Box>
           <Typography variant="h6"> Work Experience</Typography>
           <Divider sx={{ marginY: 1 }} />
         </Box>
-      )}
+      )} */}
       <Box
         sx={{
           display: "flex",
