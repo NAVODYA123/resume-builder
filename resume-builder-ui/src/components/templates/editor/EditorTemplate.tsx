@@ -109,24 +109,18 @@ export const EditorTemplate = () => {
           }}
         >
           <Typography variant="h5">Resume Editor</Typography>
-
           <PersonalInformation
             onProfilePictureChange={handleProfilePictureChange}
           />
-
           <WorkExperienceEditor />
-
           <EducationEditor />
-
           <Button type="submit" variant="contained">
             Save Resume
           </Button>
         </Box>
 
         {/* RIGHT COLUMN - LIVE RESUME PREVIEW */}
-        <Box
-        // sx={{ width: "60%" }}
-        >
+        <Box>
           <VerticalColumnTemplate
             name={personalInfo?.fullName || ""}
             title={personalInfo?.jobTitle || ""}

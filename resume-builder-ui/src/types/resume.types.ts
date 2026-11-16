@@ -72,12 +72,14 @@ export const defaultResumeData: ResumeData = {
       description: [
         {
           projectName: "Project 1",
-          projectDescription: "Description of Project 1",
+          projectDescription:
+            "Developed a web-based strata management platform in an Agile team for ERP solutions.",
           duration: "2017- 2018",
         },
         {
           projectName: "Project 2",
-          projectDescription: "Description of Project 2",
+          projectDescription:
+            "Developed a mobile application for managing employee schedules and attendance.",
           duration: "2018- 2020",
         },
       ],

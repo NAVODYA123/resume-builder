@@ -33,7 +33,14 @@ export const WorkExperience = (props: WorkExperienceProps) => {
         }}
       >
         {props.position && (
-          <Typography variant="h5">
+          <Typography
+            variant="body2"
+            sx={{
+              fontSize: "18px",
+              fontWeight: "600",
+              textTransform: "capitalize",
+            }}
+          >
             {props.company} - {props.position}
           </Typography>
         )}
