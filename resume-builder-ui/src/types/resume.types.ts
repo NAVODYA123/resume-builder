@@ -38,10 +38,21 @@ export interface CustomLeftPanelItemData {
 }
 
 export interface CustomRightPanelItemProps {
+  id: string;
   title: string;
   subtitle?: string;
   years?: string;
   content: string | string[];
+}
+
+export type ResumeSectionType =
+  | "workExperience"
+  | "education"
+  | "customRightPanelItem";
+
+export interface ResumeSectionOrder {
+  id: string;
+  type: ResumeSectionType;
 }
 export interface ResumeData {
   personalInformation: PersonalInformationData;
@@ -49,6 +60,7 @@ export interface ResumeData {
   education: EducationData[];
   customLeftPanelItem?: CustomLeftPanelItemData[];
   customRightPanelItem?: CustomRightPanelItemProps[];
+  sectionOrder: ResumeSectionOrder[];
 }
 
 export const defaultResumeData: ResumeData = {
@@ -94,5 +106,25 @@ export const defaultResumeData: ResumeData = {
       qualification: "BSc in Computer Science",
       institution: "University of Colombo",
     },
+  ],
+
+  customRightPanelItem: [
+    {
+      id: generateId(),
+      title: "Projects",
+      subtitle: "Personal Projects",
+      content: "Developed several web applications.",
+    },
+    {
+      id: generateId(),
+      title: "Certifications",
+      content: ["React Certification", "JavaScript Certification"],
+    },
+  ],
+
+  sectionOrder: [
+    { id: "work-experience", type: "workExperience" },
+    { id: "education", type: "education" },
+    // IDs must match the IDs in customRightPanelItem
   ],
 };

@@ -9,7 +9,7 @@ import { EducationEditor } from "./EducationEditor";
 
 import { VerticalColumnTemplate } from "../VerticalColumnTemplate";
 
-import type { ResumeData } from "@/types/resume.types";
+import type { ResumeData, ResumeSectionOrder } from "@/types/resume.types";
 import { defaultResumeData } from "@/types/resume.types";
 
 import { ProfileSummary } from "@/components/molecules/ProfileSummary";
@@ -21,16 +21,15 @@ import { WorkExperienceContent } from "@/components/organisms/WorkExperienceCont
 import { CustomRightPanelContent } from "@/components/organisms/CustomRightPanelContent";
 import { EducationContent } from "@/components/organisms/EducationContent";
 
+import { SectionReorder } from "@/components/organisms/SectionReorder";
+
 export const EditorTemplate = () => {
   // Initialize the complete resume form
   const methods = useForm<ResumeData>({
     defaultValues: defaultResumeData,
   });
 
-  const { control, handleSubmit } = methods;
-
-  // Watch all resume data for live preview
-  // const resumeData = useWatch({ control });
+  const { control, handleSubmit, setValue } = methods;
 
   const personalInfo = useWatch<ResumeData, "personalInformation">({
     control,
@@ -56,6 +55,44 @@ export const EditorTemplate = () => {
     control,
     name: "customRightPanelItem",
   });
+
+  const sectionOrder = useWatch({
+    control,
+    name: "sectionOrder",
+  });
+
+  const renderPreviewSection = (section: ResumeSectionOrder) => {
+    switch (section.type) {
+      case "workExperience":
+        return workExperience?.length > 0 ? (
+          <ResumeSection title="Work Experience">
+            <WorkExperienceContent experiences={workExperience} />
+          </ResumeSection>
+        ) : null;
+
+      case "education":
+        return education?.length > 0 ? (
+          <ResumeSection title="Education">
+            <EducationContent educations={education} />
+          </ResumeSection>
+        ) : null;
+
+      case "customRightPanelItem": {
+        const item = customRightPanelItem?.find(
+          (item) => item.id === section.id,
+        );
+
+        return item ? (
+          <ResumeSection title={item.title}>
+            <CustomRightPanelContent items={[item]} />
+          </ResumeSection>
+        ) : null;
+      }
+
+      default:
+        return null;
+    }
+  };
 
   // Profile picture preview
   const [imagePreview, setImagePreview] = useState<string>();
@@ -114,6 +151,15 @@ export const EditorTemplate = () => {
           />
           <WorkExperienceEditor />
           <EducationEditor />
+          <SectionReorder
+            sections={sectionOrder || []}
+            customRightPanelItem={customRightPanelItem}
+            onChange={(updatedSections) => {
+              setValue("sectionOrder", updatedSections, {
+                shouldDirty: true,
+              });
+            }}
+          />
           <Button type="submit" variant="contained">
             Save Resume
           </Button>
@@ -143,27 +189,35 @@ export const EditorTemplate = () => {
                   ))}
               </Box>
             }
+            // rightContent={
+            //   <Box>
+            //     {/* WORK EXPERIENCE */}
+            //     {workExperience?.length > 0 && (
+            //       <ResumeSection title="Work Experience">
+            //         <WorkExperienceContent experiences={workExperience} />
+            //       </ResumeSection>
+            //     )}
+
+            //     {/* EDUCATION */}
+            //     {education?.length > 0 && (
+            //       <ResumeSection title="Education">
+            //         <EducationContent educations={education} />
+            //       </ResumeSection>
+            //     )}
+
+            //     {/* CUSTOM RIGHT PANEL ITEMS */}
+            //     {customRightPanelItem?.map((item, index) => (
+            //       <ResumeSection key={index} title={item.title}>
+            //         <CustomRightPanelContent items={[item]} />
+            //       </ResumeSection>
+            //     ))}
+            //   </Box>
+            // }
+
             rightContent={
               <Box>
-                {/* WORK EXPERIENCE */}
-                {workExperience?.length > 0 && (
-                  <ResumeSection title="Work Experience">
-                    <WorkExperienceContent experiences={workExperience} />
-                  </ResumeSection>
-                )}
-
-                {/* EDUCATION */}
-                {education?.length > 0 && (
-                  <ResumeSection title="Education">
-                    <EducationContent educations={education} />
-                  </ResumeSection>
-                )}
-
-                {/* CUSTOM RIGHT PANEL ITEMS */}
-                {customRightPanelItem?.map((item, index) => (
-                  <ResumeSection key={index} title={item.title}>
-                    <CustomRightPanelContent items={[item]} />
-                  </ResumeSection>
+                {sectionOrder?.map((section) => (
+                  <Box key={section.id}>{renderPreviewSection(section)}</Box>
                 ))}
               </Box>
             }
