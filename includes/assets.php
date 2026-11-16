@@ -10,8 +10,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function rbp_enqueue_react_app() {
 
-
-
     $build_dir = RBP_PLUGIN_DIR . 'assets/build/';
     $build_url = RBP_PLUGIN_URL . 'assets/build/';
 
@@ -26,18 +24,13 @@ function rbp_enqueue_react_app() {
         true
     );
 
-   $entry = $manifest['src/main.tsx'] ?? null;
-// $entry = $manifest['index.html'] ?? null;
+    $entry = $manifest['src/main.tsx'] ?? null;
 
     if ( ! $entry ) {
         return;
     }
 
-    error_log( 'RBP: Enqueueing React application' );
-
-error_log( 'RBP: React JS URL: ' . $build_url . $entry['file'] );
-
-    // Enqueue CSS.
+    // 1. Enqueue Vite CSS.
     if ( ! empty( $entry['css'] ) ) {
 
         foreach ( $entry['css'] as $index => $css_file ) {
@@ -51,7 +44,16 @@ error_log( 'RBP: React JS URL: ' . $build_url . $entry['file'] );
         }
     }
 
-    // Enqueue JavaScript.
+    // 2. Enqueue custom WordPress integration CSS.
+    
+    wp_enqueue_style(
+        'rbp-resume-builder',
+        RBP_PLUGIN_URL . 'assets/css/resume-builder.css',
+        array(),
+        RBP_VERSION
+    );
+
+    // 3. Enqueue JavaScript.
     wp_enqueue_script(
         'rbp-react-app',
         $build_url . $entry['file'],
@@ -60,7 +62,7 @@ error_log( 'RBP: React JS URL: ' . $build_url . $entry['file'] );
         true
     );
 
-    // Load JavaScript as an ES module.
+    // 4. Load JavaScript as an ES module.
     add_filter(
         'script_loader_tag',
         'rbp_add_module_type',

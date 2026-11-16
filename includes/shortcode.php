@@ -24,7 +24,11 @@ function rbp_render_resume_builder() {
     // Load the React application.
     rbp_enqueue_react_app();
 
-    return '<div id="rbp-resume-builder"></div>';
+    return '
+        <div class="rbp-container">
+            <div id="rbp-resume-builder"></div>
+        </div>
+    ';
 }
 
 

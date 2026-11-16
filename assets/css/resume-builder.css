@@ -1,0 +1,19 @@
+/* .is-layout-constrained > #rbp-resume-builder {
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100%;
+} */
+
+/* Resume Builder main wrapper */
+.is-layout-constrained > .rbp-container {
+    max-width: none !important;
+    width: 100%;
+    margin-inline: 0 !important;
+}
+
+/* React application */
+.rbp-container #rbp-resume-builder {
+    width: 100%;
+    box-sizing: border-box;
+}
