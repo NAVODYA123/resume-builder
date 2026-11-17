@@ -9,7 +9,6 @@ type CustomRightPanelItemProps = {
 export const CustomRightPanelItem = (props: CustomRightPanelItemProps) => {
   return (
     <Box>
-      <Typography variant="h5">{props.title}</Typography>
       {props.years && (
         <Typography variant="body2" color="text.secondary">
           {props.years}

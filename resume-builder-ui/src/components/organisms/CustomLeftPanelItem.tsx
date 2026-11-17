@@ -9,9 +9,6 @@ type CustomLeftPanelListProps = {
 export const CustomLeftPanelItem = (props: CustomLeftPanelListProps) => {
   return (
     <Box>
-      <Typography variant="h4" component="h2">
-        {props.title}
-      </Typography>
       <ul>
         {props.items.map((item, index) => (
           <li key={index}>

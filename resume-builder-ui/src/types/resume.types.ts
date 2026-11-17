@@ -33,6 +33,7 @@ export interface EducationData {
 }
 
 export interface CustomLeftPanelItemData {
+  id: string;
   title: string;
   items: string[];
 }
@@ -48,7 +49,10 @@ export interface CustomRightPanelItemProps {
 export type ResumeSectionType =
   | "workExperience"
   | "education"
-  | "customRightPanelItem";
+  | "customRightPanelItem"
+  | "customLeftPanelItem"
+  | "profileSummary"
+  | "contactInfo";
 
 export interface ResumeSectionOrder {
   id: string;
@@ -61,7 +65,13 @@ export interface ResumeData {
   customLeftPanelItem?: CustomLeftPanelItemData[];
   customRightPanelItem?: CustomRightPanelItemProps[];
   sectionOrder: ResumeSectionOrder[];
+
+  // Left panel ordering
+  leftSectionOrder: ResumeSectionOrder[];
 }
+
+const projectsId = generateId();
+const certificationsId = generateId();
 
 export const defaultResumeData: ResumeData = {
   personalInformation: {
@@ -110,13 +120,13 @@ export const defaultResumeData: ResumeData = {
 
   customRightPanelItem: [
     {
-      id: generateId(),
+      id: projectsId,
       title: "Projects",
       subtitle: "Personal Projects",
       content: "Developed several web applications.",
     },
     {
-      id: generateId(),
+      id: certificationsId,
       title: "Certifications",
       content: ["React Certification", "JavaScript Certification"],
     },
@@ -125,6 +135,12 @@ export const defaultResumeData: ResumeData = {
   sectionOrder: [
     { id: "work-experience", type: "workExperience" },
     { id: "education", type: "education" },
-    // IDs must match the IDs in customRightPanelItem
+    { id: projectsId, type: "customRightPanelItem" },
+    { id: certificationsId, type: "customRightPanelItem" },
+  ],
+
+  leftSectionOrder: [
+    { id: "profile-summary", type: "profileSummary" },
+    { id: "contact-info", type: "contactInfo" },
   ],
 };

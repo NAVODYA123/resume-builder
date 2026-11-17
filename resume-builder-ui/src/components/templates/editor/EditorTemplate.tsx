@@ -15,13 +15,16 @@ import { defaultResumeData } from "@/types/resume.types";
 import { ProfileSummary } from "@/components/molecules/ProfileSummary";
 import { ContactInfo } from "@/components/molecules/ContactInfo";
 
-import { CustomLeftPanelItem } from "@/components/organisms/CustomLeftPanelItem";
+// import { CustomLeftPanelItem } from "@/components/organisms/CustomLeftPanelItem";
 import { ResumeSection } from "@/components/organisms/ResumeSection";
 import { WorkExperienceContent } from "@/components/organisms/WorkExperienceContent";
 import { CustomRightPanelContent } from "@/components/organisms/CustomRightPanelContent";
 import { EducationContent } from "@/components/organisms/EducationContent";
-
-import { SectionReorder } from "@/components/organisms/SectionReorder";
+import { SortablePreviewSections } from "@/components/organisms/SortablePreviewSections";
+import { CustomRightPanelItemEditor } from "./CustomRightPanelItemEditor";
+import { CustomLeftPanelItemEditor } from "./CustomLeftPanelItemEditor";
+import { CustomLeftPanelContent } from "@/components/organisms/CustomLeftPanelContent";
+// import { CustomRightPanelItem } from "@/components/organisms/CustomRightPanelItem";
 
 export const EditorTemplate = () => {
   // Initialize the complete resume form
@@ -61,6 +64,11 @@ export const EditorTemplate = () => {
     name: "sectionOrder",
   });
 
+  const leftSectionOrder = useWatch({
+    control,
+    name: "leftSectionOrder",
+  });
+
   const renderPreviewSection = (section: ResumeSectionOrder) => {
     switch (section.type) {
       case "workExperience":
@@ -85,6 +93,43 @@ export const EditorTemplate = () => {
         return item ? (
           <ResumeSection title={item.title}>
             <CustomRightPanelContent items={[item]} />
+          </ResumeSection>
+        ) : null;
+      }
+
+      default:
+        return null;
+    }
+  };
+
+  const renderPreviewLeftSection = (section: ResumeSectionOrder) => {
+    switch (section.type) {
+      case "profileSummary":
+        return (
+          <ResumeSection title="Profile Summary">
+            <ProfileSummary summary={personalInfo?.summary || ""} />
+          </ResumeSection>
+        );
+
+      case "contactInfo":
+        return (
+          <ResumeSection title="Contact Information">
+            <ContactInfo
+              email={personalInfo?.email || ""}
+              phone={personalInfo?.phone || ""}
+              address={personalInfo?.address || ""}
+            />
+          </ResumeSection>
+        );
+
+      case "customLeftPanelItem": {
+        const item = customLeftPanelItem?.find(
+          (item) => item.id === section.id,
+        );
+
+        return item ? (
+          <ResumeSection title={item.title}>
+            <CustomLeftPanelContent items={[item]} />
           </ResumeSection>
         ) : null;
       }
@@ -151,15 +196,9 @@ export const EditorTemplate = () => {
           />
           <WorkExperienceEditor />
           <EducationEditor />
-          <SectionReorder
-            sections={sectionOrder || []}
-            customRightPanelItem={customRightPanelItem}
-            onChange={(updatedSections) => {
-              setValue("sectionOrder", updatedSections, {
-                shouldDirty: true,
-              });
-            }}
-          />
+          <CustomRightPanelItemEditor />
+          <CustomLeftPanelItemEditor />
+
           <Button type="submit" variant="contained">
             Save Resume
           </Button>
@@ -171,55 +210,26 @@ export const EditorTemplate = () => {
             name={personalInfo?.fullName || ""}
             title={personalInfo?.jobTitle || ""}
             leftContent={
-              <Box>
-                <ProfileSummary summary={personalInfo?.summary || ""} />
-                <ContactInfo
-                  email={personalInfo?.email || ""}
-                  phone={personalInfo?.phone || ""}
-                  address={personalInfo?.address || ""}
-                />
-                {/* MULTIPLE CUSTOM LEFT PANEL LISTS */}
-                {customLeftPanelItem &&
-                  customLeftPanelItem?.map((item, index) => (
-                    <CustomLeftPanelItem
-                      key={index}
-                      title={item.title}
-                      items={item.items}
-                    />
-                  ))}
-              </Box>
+              <SortablePreviewSections
+                sections={leftSectionOrder || []}
+                onChange={(updatedSections) => {
+                  setValue("leftSectionOrder", updatedSections, {
+                    shouldDirty: true,
+                  });
+                }}
+                renderSection={renderPreviewLeftSection}
+              />
             }
-            // rightContent={
-            //   <Box>
-            //     {/* WORK EXPERIENCE */}
-            //     {workExperience?.length > 0 && (
-            //       <ResumeSection title="Work Experience">
-            //         <WorkExperienceContent experiences={workExperience} />
-            //       </ResumeSection>
-            //     )}
-
-            //     {/* EDUCATION */}
-            //     {education?.length > 0 && (
-            //       <ResumeSection title="Education">
-            //         <EducationContent educations={education} />
-            //       </ResumeSection>
-            //     )}
-
-            //     {/* CUSTOM RIGHT PANEL ITEMS */}
-            //     {customRightPanelItem?.map((item, index) => (
-            //       <ResumeSection key={index} title={item.title}>
-            //         <CustomRightPanelContent items={[item]} />
-            //       </ResumeSection>
-            //     ))}
-            //   </Box>
-            // }
-
             rightContent={
-              <Box>
-                {sectionOrder?.map((section) => (
-                  <Box key={section.id}>{renderPreviewSection(section)}</Box>
-                ))}
-              </Box>
+              <SortablePreviewSections
+                sections={sectionOrder || []}
+                onChange={(updatedSections) => {
+                  setValue("sectionOrder", updatedSections, {
+                    shouldDirty: true,
+                  });
+                }}
+                renderSection={renderPreviewSection}
+              />
             }
           />
         </Box>
