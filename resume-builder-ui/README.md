@@ -1,75 +1,88 @@
-# React + TypeScript + Vite
+# Navos Resume Builder
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A WordPress plugin that provides a React-powered resume builder, allowing users to create, customize, and organize professional resumes through an interactive interface.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Resume Builder:** Create and edit resumes using an interactive UI.
+- **Customizable Sections:** Manage personal information, work experience, education, and custom sections.
+- **Drag-and-Drop Ordering:** Reorder resume sections to customize the layout.
+- **Multiple Templates:** Display resume content using a structured, two-column layout.
+- **Live Preview:** Preview resume changes while editing.
+- **PDF Export:** Export resumes as PDF documents.
+- **WordPress Integration:** Integrates with WordPress using a custom shortcode.
+- **React Architecture:** Built with React and TypeScript, integrated into WordPress through PHP.
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- WordPress / PHP
+- React
+- TypeScript
+- Vite
+- Material UI (MUI)
+- React Hook Form
+- CSS / SCSS
 
-## Expanding the ESLint configuration
+## Installation
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+1. Download or clone this repository.
+2. Copy the plugin folder into your WordPress installation:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+   `wp-content/plugins/`
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+3. Navigate to **WordPress Admin → Plugins**.
+4. Activate **Navos Resume Builder**.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Development Setup
 
+Navigate to the React application directory and install dependencies:
+
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+Start the development server:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm run dev
 ```
+
+Build the production assets:
+
+```bash
+npm run build
+```
+
+Ensure the generated build assets are available in the plugin's configured build directory.
+
+## Usage
+
+Add the following shortcode to any WordPress page or post:
+
+```text
+[resume_builder]
+```
+
+The resume builder interface will be rendered at the shortcode location.
+
+## Project Architecture
+
+The plugin separates WordPress functionality from the React application:
+
+- **PHP:** Handles WordPress integration, shortcode registration, asset loading, and backend functionality.
+- **React:** Handles the resume builder interface and user interactions.
+- **TypeScript:** Provides type safety and maintainable application code.
+- **Vite:** Manages the frontend development and production build process.
+
+## Future Improvements
+
+- Add additional resume templates and customization options.
+- Support multiple resume profiles per user.
+- Improve PDF export formatting and multi-page pagination.
+- Add resume import functionality.
+- Introduce automated testing and improve test coverage.
+- Enhance accessibility and mobile responsiveness.
+
+## Author
+
+Lihini Galagedara
