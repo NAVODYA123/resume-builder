@@ -118,6 +118,7 @@ export const EditorTemplate = () => {
               email={personalInfo?.email || ""}
               phone={personalInfo?.phone || ""}
               address={personalInfo?.address || ""}
+              linkedin={personalInfo?.linkedin || ""}
             />
           </ResumeSection>
         );
@@ -209,6 +210,7 @@ export const EditorTemplate = () => {
           <VerticalColumnTemplate
             name={personalInfo?.fullName || ""}
             title={personalInfo?.jobTitle || ""}
+            profilePicture={personalInfo?.profilePicture ?? null}
             leftContent={
               <SortablePreviewSections
                 sections={leftSectionOrder || []}

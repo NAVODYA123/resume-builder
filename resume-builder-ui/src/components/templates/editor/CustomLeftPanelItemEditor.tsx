@@ -45,7 +45,7 @@ export const CustomLeftPanelItemEditor = () => {
     const newItem = {
       id: generateId(),
       title: "",
-      items: [""],
+      items: [],
     };
 
     append(newItem);

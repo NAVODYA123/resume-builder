@@ -5,6 +5,7 @@ import { ProfilePicture } from "../molecules/ProfilePicture";
 type VerticalColumnTemplateProps = {
   name: string;
   title: string;
+  profilePicture: File | null;
   leftContent: React.ReactNode;
   rightContent: React.ReactNode;
 };
@@ -12,6 +13,7 @@ type VerticalColumnTemplateProps = {
 export const VerticalColumnTemplate = ({
   name = "test",
   title = "test",
+  profilePicture,
   leftContent,
   rightContent,
 }: VerticalColumnTemplateProps) => {
@@ -42,7 +44,7 @@ export const VerticalColumnTemplate = ({
         }}
       >
         <Box sx={{ position: "absolute", left: 10, top: 0 }}>
-          <ProfilePicture />
+          <ProfilePicture profilePicture={profilePicture} />
         </Box>
 
         <TitleBar name={name} title={title} />
@@ -99,6 +101,10 @@ export const VerticalColumnTemplate = ({
             "& .MuiDivider-root": {
               borderColor: "#163853",
               borderBottomWidth: "2px",
+            },
+
+            "& .resume-company-position": {
+              color: "#235f8e",
             },
           }}
         >

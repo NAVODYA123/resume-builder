@@ -1,6 +1,14 @@
 import { Avatar, Box } from "@mui/material";
 
-export const ProfilePicture = () => {
+interface ProfilePictureProps {
+  profilePicture: File | null;
+}
+
+export const ProfilePicture = ({ profilePicture }: ProfilePictureProps) => {
+  const imageUrl = profilePicture
+    ? URL.createObjectURL(profilePicture)
+    : undefined;
+
   return (
     <Box
       sx={{
@@ -11,8 +19,7 @@ export const ProfilePicture = () => {
       }}
     >
       <Avatar
-        alt="Remy Sharp"
-        src="/static/images/avatar/1.jpg"
+        src={imageUrl}
         sx={{
           width: 150,
           height: 150,

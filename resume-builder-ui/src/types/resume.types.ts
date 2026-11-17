@@ -8,6 +8,7 @@ export interface PersonalInformationData {
   address: string;
   summary: string;
   profilePicture: File | null;
+  linkedin: string;
 }
 
 export interface WorkDescriptionData {
@@ -83,6 +84,7 @@ export const defaultResumeData: ResumeData = {
     summary:
       "I am a passionate software engineer with a strong background in developing scalable web applications. I have experience working with modern technologies and frameworks, and I am always eager to learn and adapt to new challenges.",
     profilePicture: null,
+    linkedin: "www.linkedin.com",
   },
 
   workExperience: [
@@ -142,5 +144,12 @@ export const defaultResumeData: ResumeData = {
   leftSectionOrder: [
     { id: "profile-summary", type: "profileSummary" },
     { id: "contact-info", type: "contactInfo" },
+  ],
+  customLeftPanelItem: [
+    {
+      id: generateId(),
+      title: "Skills",
+      items: [],
+    },
   ],
 };

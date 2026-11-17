@@ -17,12 +17,6 @@ type WorkExperienceProps = {
 export const WorkExperience = (props: WorkExperienceProps) => {
   return (
     <Box>
-      {/* {props.position && props.company && (
-        <Box>
-          <Typography variant="h6"> Work Experience</Typography>
-          <Divider sx={{ marginY: 1 }} />
-        </Box>
-      )} */}
       <Box
         sx={{
           display: "flex",
@@ -34,6 +28,7 @@ export const WorkExperience = (props: WorkExperienceProps) => {
       >
         {props.position && (
           <Typography
+            className="resume-company-position"
             variant="body2"
             sx={{
               fontSize: "18px",
@@ -47,13 +42,28 @@ export const WorkExperience = (props: WorkExperienceProps) => {
         {props.years && <Typography variant="body2">{props.years}</Typography>}
       </Box>
       {props.techStack && (
-        <Typography variant="body2">Tech Stack: {props.techStack}</Typography>
+        <Typography
+          variant="body2"
+          sx={{
+            fontSize: "16px",
+            fontWeight: "600",
+            textTransform: "capitalize",
+          }}
+        >
+          Tech Stack: {props.techStack}
+        </Typography>
       )}
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 1,
+        }}
+      >
         {Array.isArray(props.description) && (
           <Box>
             {props.description.map((desc, index) => (
-              <Box key={index}>
+              <Box key={index} sx={{ paddingTop: "16px" }}>
                 <Box
                   sx={{
                     display: "flex",
@@ -63,7 +73,16 @@ export const WorkExperience = (props: WorkExperienceProps) => {
                     alignItems: "center",
                   }}
                 >
-                  <Typography variant="body2">{desc.projectName}</Typography>
+                  <Typography
+                    sx={{
+                      fontSize: "16px",
+                      fontWeight: "600",
+                      textTransform: "capitalize",
+                    }}
+                    variant="body2"
+                  >
+                    {desc.projectName}
+                  </Typography>
                   {desc.duration && (
                     <Typography variant="body2" color="text.secondary">
                       {desc.duration}

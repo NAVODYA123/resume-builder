@@ -1,8 +1,9 @@
 import { useFormContext } from "react-hook-form";
 
-import { Avatar, Button, Stack, TextField, Typography } from "@mui/material";
+import { Button, Stack, TextField, Typography } from "@mui/material";
 
 import type { ResumeData } from "@/types/resume.types";
+import { ProfilePicture } from "@/components/molecules/ProfilePicture";
 
 interface PersonalInformationProps {
   onProfilePictureChange: (file: File | null) => void;
@@ -53,14 +54,15 @@ export const PersonalInformation = ({
 
       {/* Profile Picture */}
       <Stack spacing={1}>
-        <Avatar
+        <ProfilePicture profilePicture={profilePicture} />
+        {/* <Avatar
           src={
             profilePicture instanceof File
               ? URL.createObjectURL(profilePicture)
               : undefined
           }
           sx={{ width: 80, height: 80 }}
-        />
+        /> */}
 
         <Button component="label" variant="outlined">
           Upload Picture
@@ -113,6 +115,12 @@ export const PersonalInformation = ({
         rows={4}
         fullWidth
         {...register("personalInformation.summary")}
+      />
+
+      <TextField
+        label="Linkedin"
+        fullWidth
+        {...register("personalInformation.linkedin")}
       />
     </Stack>
   );
