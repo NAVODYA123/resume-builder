@@ -10,12 +10,21 @@ export const Education = ({ education }: EducationProps) => {
   return (
     <Box>
       {education.map((item) => (
-        <Box key={item.id} sx={{ mb: 2 }}>
-          {item.qualification && <Typography>{item.qualification}</Typography>}
-
-          {item.institution && <Typography>{item.institution}</Typography>}
-
-          {item.years && <Typography variant="body2">{item.years}</Typography>}
+        <Box
+          key={item.id}
+          sx={{
+            mb: 2,
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          {item.qualification && item.institution && (
+            <Typography variant="body2">
+              {item.qualification} - {item.institution}
+            </Typography>
+          )}
+          |{item.years && <Typography variant="body2">{item.years}</Typography>}
         </Box>
       ))}
     </Box>
