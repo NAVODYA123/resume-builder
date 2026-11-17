@@ -17,7 +17,7 @@ export const ProfilePicture = () => {
           width: 150,
           height: 150,
           borderRadius: "50%",
-          border: "8px solid #951ceb",
+          border: "8px solid #ffffff",
         }}
       />
     </Box>
