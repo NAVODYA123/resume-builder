@@ -85,7 +85,13 @@ const EducationFields = ({
   return (
     <Stack spacing={2}>
       {canRemove && (
-        <Stack>
+        <Stack
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "flex-end",
+          }}
+        >
           <IconButton
             color="error"
             onClick={onRemove}

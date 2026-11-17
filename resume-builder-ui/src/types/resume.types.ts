@@ -8,6 +8,7 @@ export interface PersonalInformationData {
   address: string;
   summary: string;
   profilePicture: File | null;
+  linkedin: string;
 }
 
 export interface WorkDescriptionData {
@@ -33,15 +34,30 @@ export interface EducationData {
 }
 
 export interface CustomLeftPanelItemData {
+  id: string;
   title: string;
   items: string[];
 }
 
 export interface CustomRightPanelItemProps {
+  id: string;
   title: string;
   subtitle?: string;
   years?: string;
   content: string | string[];
+}
+
+export type ResumeSectionType =
+  | "workExperience"
+  | "education"
+  | "customRightPanelItem"
+  | "customLeftPanelItem"
+  | "profileSummary"
+  | "contactInfo";
+
+export interface ResumeSectionOrder {
+  id: string;
+  type: ResumeSectionType;
 }
 export interface ResumeData {
   personalInformation: PersonalInformationData;
@@ -49,7 +65,14 @@ export interface ResumeData {
   education: EducationData[];
   customLeftPanelItem?: CustomLeftPanelItemData[];
   customRightPanelItem?: CustomRightPanelItemProps[];
+  sectionOrder: ResumeSectionOrder[];
+
+  // Left panel ordering
+  leftSectionOrder: ResumeSectionOrder[];
 }
+
+const projectsId = generateId();
+const certificationsId = generateId();
 
 export const defaultResumeData: ResumeData = {
   personalInformation: {
@@ -61,6 +84,7 @@ export const defaultResumeData: ResumeData = {
     summary:
       "I am a passionate software engineer with a strong background in developing scalable web applications. I have experience working with modern technologies and frameworks, and I am always eager to learn and adapt to new challenges.",
     profilePicture: null,
+    linkedin: "www.linkedin.com",
   },
 
   workExperience: [
@@ -93,6 +117,39 @@ export const defaultResumeData: ResumeData = {
       years: "2013- 2017",
       qualification: "BSc in Computer Science",
       institution: "University of Colombo",
+    },
+  ],
+
+  customRightPanelItem: [
+    {
+      id: projectsId,
+      title: "Projects",
+      subtitle: "Personal Projects",
+      content: "Developed several web applications.",
+    },
+    {
+      id: certificationsId,
+      title: "Certifications",
+      content: ["React Certification", "JavaScript Certification"],
+    },
+  ],
+
+  sectionOrder: [
+    { id: "work-experience", type: "workExperience" },
+    { id: "education", type: "education" },
+    { id: projectsId, type: "customRightPanelItem" },
+    { id: certificationsId, type: "customRightPanelItem" },
+  ],
+
+  leftSectionOrder: [
+    { id: "profile-summary", type: "profileSummary" },
+    { id: "contact-info", type: "contactInfo" },
+  ],
+  customLeftPanelItem: [
+    {
+      id: generateId(),
+      title: "Skills",
+      items: [],
     },
   ],
 };
