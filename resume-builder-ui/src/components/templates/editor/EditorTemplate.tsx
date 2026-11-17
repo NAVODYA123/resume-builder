@@ -205,7 +205,7 @@ export const EditorTemplate = () => {
         </Box>
 
         {/* RIGHT COLUMN - LIVE RESUME PREVIEW */}
-        <Box>
+        <Box sx={{ backgroundColor: "#656161" }}>
           <VerticalColumnTemplate
             name={personalInfo?.fullName || ""}
             title={personalInfo?.jobTitle || ""}

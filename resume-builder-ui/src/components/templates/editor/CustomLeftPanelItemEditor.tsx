@@ -120,7 +120,13 @@ const CustomLeftPanelItemEditorFields = ({
   return (
     <Stack spacing={2}>
       {canRemove && (
-        <Stack>
+        <Stack
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "flex-end",
+          }}
+        >
           <IconButton
             color="error"
             onClick={onRemove}
@@ -140,16 +146,6 @@ const CustomLeftPanelItemEditorFields = ({
         error={!!customLeftPanelItemErrors?.title}
         helperText={customLeftPanelItemErrors?.title?.message}
       />
-
-      {/* <TextField
-        label="Items"
-        fullWidth
-        {...register(`customLeftPanelItem.${index}.items`, {
-          required: "Items is required",
-        })}
-        error={!!customLeftPanelItemErrors?.items}
-        helperText={customLeftPanelItemErrors?.items?.message}
-      /> */}
 
       <Controller
         name={`customLeftPanelItem.${index}.items`}
