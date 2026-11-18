@@ -29,9 +29,20 @@ export const TitleBar = ({ name, title }: Props) => {
           backgroundColor: "#9dc3e0",
           pl: "150px",
           paddingBlock: "32px",
+          maxWidth: 450,
+          height: 80,
         }}
       >
-        <Typography variant="h4">{name}</Typography>
+        <Typography
+          sx={{
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+          }}
+          variant="h4"
+        >
+          {name}
+        </Typography>
         <Typography variant="h5">{title}</Typography>
       </Box>
     </Box>
