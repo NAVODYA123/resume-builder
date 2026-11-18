@@ -219,14 +219,23 @@ export const EditorTemplate = () => {
   return (
     <FormProvider {...methods}>
       <Box>
-        <Button
-          variant="contained"
-          color="success"
-          onClick={() => window.print()}
-          sx={{ mt: 2 }}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "flex-end",
+          }}
         >
-          Export as PDF
-        </Button>
+          <Button
+            variant="contained"
+            color="info"
+            onClick={() => window.print()}
+            sx={{ mt: 2 }}
+          >
+            Export as PDF
+          </Button>
+        </Box>
+
         <Box
           sx={{
             display: "grid",
@@ -244,9 +253,13 @@ export const EditorTemplate = () => {
               display: "flex",
               flexDirection: "column",
               gap: 3,
+              height: "100vh",
+              overflowY: "auto",
             }}
           >
-            <Typography variant="h5">Resume Editor</Typography>
+            <Typography sx={{}} variant="h5">
+              Resume Editor
+            </Typography>
             <PersonalInformation
               onProfilePictureChange={handleProfilePictureChange}
             />
@@ -263,10 +276,11 @@ export const EditorTemplate = () => {
           {/* RIGHT COLUMN - LIVE RESUME PREVIEW */}
           <Box
             className="resume-preview"
-            // ref={resumeRef}
             sx={{
               backgroundColor: "#656161",
               position: "relative",
+              height: "100vh",
+              overflowY: "auto",
             }}
           >
             {/* Hidden left-column measurements */}

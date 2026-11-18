@@ -9,16 +9,18 @@ type CustomRightPanelItemProps = {
 export const CustomRightPanelItem = (props: CustomRightPanelItemProps) => {
   return (
     <Box>
-      {props.years && (
-        <Typography variant="body2" color="text.secondary">
-          {props.years}
-        </Typography>
-      )}
-      {props.subtitle && (
-        <Typography variant="body2" color="text.secondary">
-          {props.subtitle}
-        </Typography>
-      )}
+      <Box sx={{ display: "flex", flexDirection: "row" }}>
+        {props.subtitle && (
+          <Typography variant="body2" color="text.secondary">
+            {props.subtitle} -
+          </Typography>
+        )}
+        {props.years && (
+          <Typography variant="body2" color="text.secondary">
+            {props.years}
+          </Typography>
+        )}
+      </Box>
       {Array.isArray(props.content) ? (
         <ul>
           {props.content.map((item, index) => (
