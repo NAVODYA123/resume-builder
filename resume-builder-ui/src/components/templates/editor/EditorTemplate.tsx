@@ -244,6 +244,8 @@ export const EditorTemplate = () => {
               display: "flex",
               flexDirection: "column",
               gap: 3,
+              height: "100vh",
+              overflowY: "auto",
             }}
           >
             <Typography variant="h5">Resume Editor</Typography>
@@ -267,6 +269,8 @@ export const EditorTemplate = () => {
             sx={{
               backgroundColor: "#656161",
               position: "relative",
+              height: "100vh",
+              overflowY: "auto",
             }}
           >
             {/* Hidden left-column measurements */}
