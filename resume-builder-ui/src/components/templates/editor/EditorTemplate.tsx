@@ -254,20 +254,34 @@ export const EditorTemplate = () => {
               flexDirection: "column",
               gap: 3,
               height: "100vh",
-              overflowY: "auto",
             }}
           >
-            <Typography sx={{}} variant="h5">
+            <Typography
+              variant="h5"
+              sx={{
+                backgroundColor: "#324655",
+                color: "white",
+                padding: 1.5,
+                borderRadius: 1,
+                fontWeight: 600,
+              }}
+            >
               Resume Editor
             </Typography>
-            <PersonalInformation
-              onProfilePictureChange={handleProfilePictureChange}
-            />
-            <WorkExperienceEditor />
-            <EducationEditor />
-            <CustomRightPanelItemEditor />
-            <CustomLeftPanelItemEditor />
-
+            <Box
+              sx={{
+                overflowY: "auto",
+                borderRight: "2px solid #324655",
+              }}
+            >
+              <PersonalInformation
+                onProfilePictureChange={handleProfilePictureChange}
+              />
+              <WorkExperienceEditor />
+              <EducationEditor />
+              <CustomRightPanelItemEditor />
+              <CustomLeftPanelItemEditor />
+            </Box>
             <Button type="submit" variant="contained">
               Save Resume
             </Button>
