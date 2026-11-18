@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useForm, FormProvider, useWatch } from "react-hook-form";
 
 import { Box, Typography, Button } from "@mui/material";
@@ -24,6 +24,9 @@ import { SortablePreviewSections } from "@/components/organisms/SortablePreviewS
 import { CustomRightPanelItemEditor } from "./CustomRightPanelItemEditor";
 import { CustomLeftPanelItemEditor } from "./CustomLeftPanelItemEditor";
 import { CustomLeftPanelContent } from "@/components/organisms/CustomLeftPanelContent";
+import { usePaginatedSections } from "@/hooks/usePaginatedSections";
+import { useSectionMeasurements } from "@/hooks/useSectionMeasurements";
+import { ResumeMeasurement } from "@/components/organisms/ResumeMeasurement";
 // import { CustomRightPanelItem } from "@/components/organisms/CustomRightPanelItem";
 
 export const EditorTemplate = () => {
@@ -68,6 +71,53 @@ export const EditorTemplate = () => {
     control,
     name: "leftSectionOrder",
   });
+
+  // Refs for the hidden measurement containers
+  const leftMeasurementRef = useRef<HTMLDivElement>(null);
+  const rightMeasurementRef = useRef<HTMLDivElement>(null);
+
+  // Re-measure when the section IDs change.
+  const leftMeasurementDependency =
+    leftSectionOrder?.map((section) => section.id).join("|") ?? "";
+
+  const rightMeasurementDependency =
+    sectionOrder?.map((section) => section.id).join("|") ?? "";
+
+  // Measure left and right sections independently
+  const leftSectionHeights = useSectionMeasurements({
+    containerRef: leftMeasurementRef,
+    dependency: leftMeasurementDependency,
+  });
+
+  const rightSectionHeights = useSectionMeasurements({
+    containerRef: rightMeasurementRef,
+    dependency: rightMeasurementDependency,
+  });
+
+  // Available vertical space inside the A4 pages
+  const FIRST_PAGE_HEIGHT = 848;
+  const OTHER_PAGE_HEIGHT = 1068;
+
+  // Calculate left-column pages
+  const leftPages = usePaginatedSections({
+    sections: leftSectionOrder || [],
+    sectionHeights: leftSectionHeights,
+    firstPageHeight: FIRST_PAGE_HEIGHT,
+    pageHeight: OTHER_PAGE_HEIGHT,
+    sectionGap: 16,
+  });
+
+  // Calculate right-column pages
+  const rightPages = usePaginatedSections({
+    sections: sectionOrder || [],
+    sectionHeights: rightSectionHeights,
+    firstPageHeight: FIRST_PAGE_HEIGHT,
+    pageHeight: OTHER_PAGE_HEIGHT,
+    sectionGap: 24,
+  });
+
+  // Use the larger page count so both columns have matching page layouts
+  const totalPages = Math.max(1, leftPages.length, rightPages.length);
 
   const renderPreviewSection = (section: ResumeSectionOrder) => {
     switch (section.type) {
@@ -205,15 +255,17 @@ export const EditorTemplate = () => {
           </Button>
         </Box>
 
-        {/* RIGHT COLUMN - LIVE RESUME PREVIEW */}
+        {/* RIGHT COLUMN - LIVE RESUME PREVIEW
         <Box sx={{ backgroundColor: "#656161" }}>
           <VerticalColumnTemplate
             name={personalInfo?.fullName || ""}
             title={personalInfo?.jobTitle || ""}
+            isFirstPage={true}
             profilePicture={personalInfo?.profilePicture ?? null}
             leftContent={
               <SortablePreviewSections
                 sections={leftSectionOrder || []}
+                pages={[leftSectionOrder || []]}
                 onChange={(updatedSections) => {
                   setValue("leftSectionOrder", updatedSections, {
                     shouldDirty: true,
@@ -225,6 +277,7 @@ export const EditorTemplate = () => {
             rightContent={
               <SortablePreviewSections
                 sections={sectionOrder || []}
+                pages={[sectionOrder || []]}
                 onChange={(updatedSections) => {
                   setValue("sectionOrder", updatedSections, {
                     shouldDirty: true,
@@ -234,6 +287,65 @@ export const EditorTemplate = () => {
               />
             }
           />
+        </Box> */}
+
+        {/* RIGHT COLUMN - LIVE RESUME PREVIEW */}
+        <Box
+          sx={{
+            backgroundColor: "#656161",
+            position: "relative",
+          }}
+        >
+          {/* Hidden left-column measurements */}
+          <ResumeMeasurement
+            sections={leftSectionOrder || []}
+            renderSection={renderPreviewLeftSection}
+            column="left"
+            containerRef={leftMeasurementRef}
+          />
+
+          {/* Hidden right-column measurements */}
+          <ResumeMeasurement
+            sections={sectionOrder || []}
+            renderSection={renderPreviewSection}
+            column="right"
+            containerRef={rightMeasurementRef}
+          />
+
+          {/* Actual resume pages */}
+          {Array.from({ length: totalPages }, (_, pageIndex) => (
+            <VerticalColumnTemplate
+              key={`resume-page-${pageIndex}`}
+              name={personalInfo?.fullName || ""}
+              title={personalInfo?.jobTitle || ""}
+              profilePicture={personalInfo?.profilePicture ?? null}
+              isFirstPage={pageIndex === 0}
+              leftContent={
+                <SortablePreviewSections
+                  sections={leftSectionOrder || []}
+                  pages={[leftPages[pageIndex] || []]}
+                  onChange={(updatedSections) => {
+                    setValue("leftSectionOrder", updatedSections, {
+                      shouldDirty: true,
+                    });
+                  }}
+                  renderSection={renderPreviewLeftSection}
+                />
+              }
+              rightContent={
+                <SortablePreviewSections
+                  sections={sectionOrder || []}
+                  pages={[rightPages[pageIndex] || []]}
+                  onChange={(updatedSections) => {
+                    setValue("sectionOrder", updatedSections, {
+                      shouldDirty: true,
+                    });
+                  }}
+                  renderSection={renderPreviewSection}
+                />
+              }
+            />
+          ))}
         </Box>
       </Box>
     </FormProvider>
