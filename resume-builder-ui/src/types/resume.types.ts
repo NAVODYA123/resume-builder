@@ -1,4 +1,4 @@
-import { generateId } from "@/utils/generateId";
+// import { generateId } from "@/utils/generateId";
 
 export interface PersonalInformationData {
   fullName: string;
@@ -71,85 +71,33 @@ export interface ResumeData {
   leftSectionOrder: ResumeSectionOrder[];
 }
 
-const projectsId = generateId();
-const certificationsId = generateId();
-
 export const defaultResumeData: ResumeData = {
   personalInformation: {
-    fullName: "Lihini Galagedara",
-    jobTitle: "Software Engineer",
-    email: "lihini@gmail.com",
-    phone: "0770190533",
-    address: "polduwa road pelawatte",
-    summary:
-      "I am a passionate software engineer with a strong background in developing scalable web applications. I have experience working with modern technologies and frameworks, and I am always eager to learn and adapt to new challenges.",
+    fullName: "",
+    jobTitle: "",
+    email: "",
+    phone: "",
+    address: "",
+    summary: "",
     profilePicture: null,
-    linkedin: "www.linkedin.com",
+    linkedin: "",
   },
 
-  workExperience: [
-    {
-      id: generateId(),
-      years: "2017- 2020",
-      company: "swivel tech",
-      position: "software engineer",
-      description: [
-        {
-          projectName: "Project 1",
-          projectDescription:
-            "Developed a web-based strata management platform in an Agile team for ERP solutions.",
-          duration: "",
-        },
-        {
-          projectName: "Project 2",
-          projectDescription:
-            "Developed a mobile application for managing employee schedules and attendance.",
-          duration: "",
-        },
-      ],
-      techstack: ["react", "typescript", "nodejs"],
-    },
-  ],
+  workExperience: [],
 
-  education: [
-    {
-      id: generateId(),
-      years: "2013- 2017",
-      qualification: "BSc in Computer Science",
-      institution: "University of Colombo",
-    },
-  ],
+  education: [],
 
-  customRightPanelItem: [
-    {
-      id: projectsId,
-      title: "Projects",
-      subtitle: "Personal Projects",
-      content: "Developed several web applications.",
-    },
-    {
-      id: certificationsId,
-      title: "Certifications",
-      content: ["React Certification", "JavaScript Certification"],
-    },
-  ],
+  customRightPanelItem: [],
+
+  customLeftPanelItem: [],
 
   sectionOrder: [
     { id: "work-experience", type: "workExperience" },
     { id: "education", type: "education" },
-    { id: projectsId, type: "customRightPanelItem" },
-    { id: certificationsId, type: "customRightPanelItem" },
   ],
 
   leftSectionOrder: [
     { id: "profile-summary", type: "profileSummary" },
     { id: "contact-info", type: "contactInfo" },
-  ],
-  customLeftPanelItem: [
-    {
-      id: generateId(),
-      title: "Skills",
-      items: [],
-    },
   ],
 };
