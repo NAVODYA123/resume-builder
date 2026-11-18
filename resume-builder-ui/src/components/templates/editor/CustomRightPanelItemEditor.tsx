@@ -1,6 +1,12 @@
+import { useState } from "react";
+
 import { useFormContext, useFieldArray } from "react-hook-form";
 
-import type { UseFormRegister, FieldErrors } from "react-hook-form";
+import type {
+  UseFormRegister,
+  UseFormSetValue,
+  FieldErrors,
+} from "react-hook-form";
 
 import {
   Stack,
@@ -14,12 +20,19 @@ import {
 
 import DeleteIcon from "@mui/icons-material/Delete";
 
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+
+import type { Dayjs } from "dayjs";
+
 import type { ResumeData } from "@/types/resume.types";
 import { generateId } from "@/utils/generateId";
 
-interface EducationFieldsProps {
+interface CustomRightPanelItemEditorFieldsProps {
   index: number;
   register: UseFormRegister<ResumeData>;
+  setValue: UseFormSetValue<ResumeData>;
   errors: FieldErrors<ResumeData>;
   onRemove: () => void;
   canRemove: boolean;
@@ -88,9 +101,10 @@ export const CustomRightPanelItemEditor = () => {
 
       {fields.map((field, index) => (
         <Box key={field.id}>
-          <EducationFields
+          <CustomRightPanelItemEditorFields
             index={index}
             register={register}
+            setValue={setValue}
             errors={errors}
             onRemove={() => handleRemove(index)}
             canRemove={fields.length > 1}
@@ -107,14 +121,18 @@ export const CustomRightPanelItemEditor = () => {
   );
 };
 
-// Individual education fields
-const EducationFields = ({
+// Individual CustomRightPanelItemEditor fields
+const CustomRightPanelItemEditorFields = ({
   index,
   register,
+  setValue,
   errors,
   onRemove,
   canRemove,
-}: EducationFieldsProps) => {
+}: CustomRightPanelItemEditorFieldsProps) => {
+  const [startDate, setStartDate] = useState<Dayjs | null>(null);
+  const [endDate, setEndDate] = useState<Dayjs | null>(null);
+
   const customRightPanelItemErrors = errors.customRightPanelItem?.[index];
 
   return (
@@ -157,18 +175,82 @@ const EducationFields = ({
         helperText={customRightPanelItemErrors?.subtitle?.message}
       />
 
-      <TextField
-        label="years"
-        fullWidth
-        {...register(`customRightPanelItem.${index}.years`, {
-          required: "Duration is required",
-        })}
-        error={!!customRightPanelItemErrors?.years}
-        helperText={customRightPanelItemErrors?.years?.message}
-      />
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <Stack direction="row" spacing={2}>
+          <DatePicker
+            label="Start Date"
+            views={["month", "year"]}
+            value={startDate}
+            onChange={(newValue) => {
+              setStartDate(newValue);
+
+              if (newValue?.isValid()) {
+                const start = newValue.format("MMMM YYYY");
+
+                const validEnd =
+                  endDate?.isValid() && !endDate.isBefore(newValue, "month");
+
+                if (endDate && !validEnd) {
+                  setEndDate(null);
+                }
+
+                const end = validEnd ? endDate?.format("MMMM YYYY") : "Present";
+
+                setValue(
+                  `customRightPanelItem.${index}.years`,
+                  `${start} - ${end}`,
+                  {
+                    shouldValidate: true,
+                    shouldDirty: true,
+                  },
+                );
+              } else {
+                setValue(`customRightPanelItem.${index}.years`, "", {
+                  shouldValidate: true,
+                  shouldDirty: true,
+                });
+              }
+            }}
+            slotProps={{
+              textField: { fullWidth: true },
+            }}
+          />
+
+          <DatePicker
+            label="End Date"
+            views={["month", "year"]}
+            value={endDate}
+            minDate={startDate ?? undefined}
+            disabled={!startDate}
+            onChange={(newValue) => {
+              setEndDate(newValue);
+
+              if (startDate?.isValid()) {
+                const start = startDate.format("MMMM YYYY");
+
+                const end = newValue?.isValid()
+                  ? newValue.format("MMMM YYYY")
+                  : "Present";
+
+                setValue(
+                  `customRightPanelItem.${index}.years`,
+                  `${start} - ${end}`,
+                  {
+                    shouldValidate: true,
+                    shouldDirty: true,
+                  },
+                );
+              }
+            }}
+            slotProps={{
+              textField: { fullWidth: true },
+            }}
+          />
+        </Stack>
+      </LocalizationProvider>
 
       <TextField
-        label="content"
+        label="Content"
         fullWidth
         {...register(`customRightPanelItem.${index}.content`, {
           required: "Content is required",
