@@ -20,6 +20,7 @@ export const ResumeMeasurement = ({
   return (
     <Box
       ref={containerRef}
+      className="resume-measurement"
       sx={{
         position: "absolute",
         left: "-10000px",
