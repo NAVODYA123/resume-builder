@@ -265,7 +265,6 @@ export const EditorTemplate = () => {
           {/* RIGHT COLUMN - LIVE RESUME PREVIEW */}
           <Box
             className="resume-preview"
-            // ref={resumeRef}
             sx={{
               backgroundColor: "#656161",
               position: "relative",
