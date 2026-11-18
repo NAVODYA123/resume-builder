@@ -219,14 +219,23 @@ export const EditorTemplate = () => {
   return (
     <FormProvider {...methods}>
       <Box>
-        <Button
-          variant="contained"
-          color="success"
-          onClick={() => window.print()}
-          sx={{ mt: 2 }}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "flex-end",
+          }}
         >
-          Export as PDF
-        </Button>
+          <Button
+            variant="contained"
+            color="info"
+            onClick={() => window.print()}
+            sx={{ mt: 2 }}
+          >
+            Export as PDF
+          </Button>
+        </Box>
+
         <Box
           sx={{
             display: "grid",
@@ -244,17 +253,35 @@ export const EditorTemplate = () => {
               display: "flex",
               flexDirection: "column",
               gap: 3,
+              height: "100vh",
             }}
           >
-            <Typography variant="h5">Resume Editor</Typography>
-            <PersonalInformation
-              onProfilePictureChange={handleProfilePictureChange}
-            />
-            <WorkExperienceEditor />
-            <EducationEditor />
-            <CustomRightPanelItemEditor />
-            <CustomLeftPanelItemEditor />
-
+            <Typography
+              variant="h5"
+              sx={{
+                backgroundColor: "#324655",
+                color: "white",
+                padding: 1.5,
+                borderRadius: 1,
+                fontWeight: 600,
+              }}
+            >
+              Resume Editor
+            </Typography>
+            <Box
+              sx={{
+                overflowY: "auto",
+                borderRight: "2px solid #324655",
+              }}
+            >
+              <PersonalInformation
+                onProfilePictureChange={handleProfilePictureChange}
+              />
+              <WorkExperienceEditor />
+              <EducationEditor />
+              <CustomRightPanelItemEditor />
+              <CustomLeftPanelItemEditor />
+            </Box>
             <Button type="submit" variant="contained">
               Save Resume
             </Button>
@@ -263,10 +290,11 @@ export const EditorTemplate = () => {
           {/* RIGHT COLUMN - LIVE RESUME PREVIEW */}
           <Box
             className="resume-preview"
-            // ref={resumeRef}
             sx={{
               backgroundColor: "#656161",
               position: "relative",
+              height: "100vh",
+              overflowY: "auto",
             }}
           >
             {/* Hidden left-column measurements */}

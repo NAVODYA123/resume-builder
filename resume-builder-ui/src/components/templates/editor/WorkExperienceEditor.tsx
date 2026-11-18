@@ -23,6 +23,10 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 import type { ResumeData } from "@/types/resume.types";
 import { generateId } from "@/utils/generateId";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { Dayjs } from "dayjs";
 
 // Type-safe props
 interface WorkExperienceFieldsProps {
@@ -103,6 +107,8 @@ const WorkExperienceFields = ({
   canRemove,
 }: WorkExperienceFieldsProps) => {
   const [techStackInput, setTechStackInput] = useState("");
+  const [startDate, setStartDate] = useState<Dayjs | null>(null);
+  const [endDate, setEndDate] = useState<Dayjs | null>(null);
 
   const techStack = useWatch({
     control,
@@ -166,15 +172,60 @@ const WorkExperienceFields = ({
         )}
       />
 
-      <TextField
-        label="Work Duration"
-        fullWidth
-        {...register(`workExperience.${index}.years`, {
-          required: "Duration is required",
-        })}
-        error={!!workExperienceErrors?.years}
-        helperText={workExperienceErrors?.years?.message}
-      />
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <Stack direction="row" spacing={2}>
+          <DatePicker
+            label="Start Date"
+            views={["month", "year"]}
+            value={startDate}
+            onChange={(newValue) => {
+              setStartDate(newValue);
+
+              if (newValue?.isValid()) {
+                const start = newValue.format("MMMM YYYY");
+
+                const end = endDate?.isValid()
+                  ? endDate.format("MMMM YYYY")
+                  : "Present";
+
+                setValue(`workExperience.${index}.years`, `${start} - ${end}`, {
+                  shouldValidate: true,
+                  shouldDirty: true,
+                });
+              }
+            }}
+            slotProps={{
+              textField: { fullWidth: true },
+            }}
+          />
+
+          <DatePicker
+            label="End Date"
+            views={["month", "year"]}
+            value={endDate}
+            minDate={startDate ?? undefined}
+            onChange={(newValue) => {
+              setEndDate(newValue);
+
+              if (startDate?.isValid()) {
+                const start = startDate.format("MMMM YYYY");
+
+                const end = newValue?.isValid()
+                  ? newValue.format("MMMM YYYY")
+                  : "Present";
+
+                setValue(`workExperience.${index}.years`, `${start} - ${end}`, {
+                  shouldValidate: true,
+                  shouldDirty: true,
+                });
+              }
+            }}
+            slotProps={{
+              textField: { fullWidth: true },
+            }}
+          />
+        </Stack>
+      </LocalizationProvider>
 
       <TextField
         label="Tech Stack"

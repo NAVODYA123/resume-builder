@@ -32,6 +32,7 @@ export const VerticalColumnTemplate = ({
         borderRadius: 0,
         backgroundColor: "#ffffff",
         mb: 3,
+        mt: 3,
       }}
     >
       {/* Header */}
