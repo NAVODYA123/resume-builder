@@ -8,6 +8,7 @@ type VerticalColumnTemplateProps = {
   profilePicture: File | null;
   leftContent: React.ReactNode;
   rightContent: React.ReactNode;
+  isFirstPage?: boolean;
 };
 
 export const VerticalColumnTemplate = ({
@@ -16,39 +17,44 @@ export const VerticalColumnTemplate = ({
   profilePicture,
   leftContent,
   rightContent,
+  isFirstPage = false,
 }: VerticalColumnTemplateProps) => {
   return (
     <Paper
+      className="resume-page"
       elevation={4}
       sx={{
         width: "210mm",
-        minHeight: "297mm",
+        height: "297mm",
         margin: "auto",
         position: "relative",
         overflow: "hidden",
         borderRadius: 0,
         backgroundColor: "#ffffff",
+        mb: 3,
       }}
     >
       {/* Header */}
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          position: "absolute",
-          left: 16,
-          right: 16,
-          justifyContent: "flex-end",
-          zIndex: 10,
-          top: "30px",
-        }}
-      >
-        <Box sx={{ position: "absolute", left: 10, top: 0 }}>
-          <ProfilePicture profilePicture={profilePicture} />
-        </Box>
+      {isFirstPage && (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            position: "absolute",
+            left: 16,
+            right: 16,
+            justifyContent: "flex-end",
+            zIndex: 10,
+            top: "30px",
+          }}
+        >
+          <Box sx={{ position: "absolute", left: 10, top: 0 }}>
+            <ProfilePicture profilePicture={profilePicture} />
+          </Box>
 
-        <TitleBar name={name} title={title} />
-      </Box>
+          <TitleBar name={name} title={title} />
+        </Box>
+      )}
 
       {/* Columns */}
       <Box
@@ -67,7 +73,7 @@ export const VerticalColumnTemplate = ({
             flexDirection: "column",
             gap: 2,
             backgroundColor: "#163853",
-            pt: "250px",
+            pt: isFirstPage ? "250px" : "30px",
             px: "20px",
             pb: 3,
 
@@ -89,8 +95,11 @@ export const VerticalColumnTemplate = ({
           sx={{
             width: "70%",
             boxSizing: "border-box",
+            display: "flex",
+            flexDirection: "column",
+            gap: 3,
             backgroundColor: "#ffffff",
-            pt: "250px",
+            pt: isFirstPage ? "250px" : "30px",
             px: "20px",
             pb: 3,
 
