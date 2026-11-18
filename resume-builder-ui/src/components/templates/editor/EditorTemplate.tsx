@@ -9,7 +9,11 @@ import { EducationEditor } from "./EducationEditor";
 
 import { VerticalColumnTemplate } from "../VerticalColumnTemplate";
 
-import type { ResumeData, ResumeSectionOrder } from "@/types/resume.types";
+import type {
+  ResumeData,
+  ResumeSectionOrder,
+  SavedResumeData,
+} from "@/types/resume.types";
 import { defaultResumeData } from "@/types/resume.types";
 
 import { ProfileSummary } from "@/components/molecules/ProfileSummary";
@@ -26,12 +30,16 @@ import { CustomLeftPanelContent } from "@/components/organisms/CustomLeftPanelCo
 import { usePaginatedSections } from "@/hooks/usePaginatedSections";
 import { useSectionMeasurements } from "@/hooks/useSectionMeasurements";
 import { ResumeMeasurement } from "@/components/organisms/ResumeMeasurement";
+import { saveResume, updateResume } from "@/services/resumeService";
 
 export const EditorTemplate = () => {
   // Initialize the complete resume form
   const methods = useForm<ResumeData>({
     defaultValues: defaultResumeData,
   });
+
+  const [resumeId, setResumeId] = useState<number | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   const { control, handleSubmit, setValue } = methods;
 
@@ -212,8 +220,36 @@ export const EditorTemplate = () => {
   }, [imagePreview]);
 
   // Submit complete resume
-  const onSubmit = (data: ResumeData) => {
-    console.log("Complete Resume:", data);
+  const onSubmit = async (data: ResumeData) => {
+    try {
+      setIsSaving(true);
+
+      const resumeDataToSave: SavedResumeData = {
+        ...data,
+        personalInformation: {
+          ...data.personalInformation,
+          profilePicture: null,
+        },
+      };
+
+      let result;
+
+      if (resumeId === null) {
+        // Create a new resume
+        result = await saveResume(resumeDataToSave, "My Resume");
+
+        setResumeId(result.resumeId);
+      } else {
+        // Update existing resume
+        result = await updateResume(resumeId, resumeDataToSave, "My Resume");
+      }
+
+      console.log(result.message);
+    } catch (error) {
+      console.error("Failed to save resume:", error);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -282,8 +318,8 @@ export const EditorTemplate = () => {
               <CustomRightPanelItemEditor />
               <CustomLeftPanelItemEditor />
             </Box>
-            <Button type="submit" variant="contained">
-              Save Resume
+            <Button type="submit" variant="contained" disabled={isSaving}>
+              {isSaving ? "Saving..." : "Save Resume"}
             </Button>
           </Box>
 
