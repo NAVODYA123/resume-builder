@@ -1,6 +1,10 @@
 import { useFormContext, useFieldArray } from "react-hook-form";
 
-import type { UseFormRegister, FieldErrors } from "react-hook-form";
+import type {
+  UseFormRegister,
+  FieldErrors,
+  UseFormSetValue,
+} from "react-hook-form";
 
 import {
   Stack,
@@ -16,6 +20,13 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 import type { ResumeData } from "@/types/resume.types";
 import { generateId } from "@/utils/generateId";
+import { useState } from "react";
+
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+
+import type { Dayjs } from "dayjs";
 
 interface EducationFieldsProps {
   index: number;
@@ -23,12 +34,14 @@ interface EducationFieldsProps {
   errors: FieldErrors<ResumeData>;
   onRemove: () => void;
   canRemove: boolean;
+  setValue: UseFormSetValue<ResumeData>;
 }
 
 export const EducationEditor = () => {
   const {
     register,
     control,
+    setValue,
     formState: { errors },
   } = useFormContext<ResumeData>();
 
@@ -46,6 +59,7 @@ export const EducationEditor = () => {
           <EducationFields
             index={index}
             register={register}
+            setValue={setValue}
             errors={errors}
             onRemove={() => remove(index)}
             canRemove={fields.length > 1}
@@ -77,10 +91,13 @@ const EducationFields = ({
   index,
   register,
   errors,
+  setValue,
   onRemove,
   canRemove,
 }: EducationFieldsProps) => {
   const educationErrors = errors.education?.[index];
+  const [startDate, setStartDate] = useState<Dayjs | null>(null);
+  const [endDate, setEndDate] = useState<Dayjs | null>(null);
 
   return (
     <Stack spacing={2}>
@@ -102,7 +119,7 @@ const EducationFields = ({
         </Stack>
       )}
 
-      <TextField
+      {/* <TextField
         label="Study Duration"
         fullWidth
         {...register(`education.${index}.years`, {
@@ -110,7 +127,74 @@ const EducationFields = ({
         })}
         error={!!educationErrors?.years}
         helperText={educationErrors?.years?.message}
-      />
+      /> */}
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <Stack direction="row" spacing={2}>
+          <DatePicker
+            label="Start Date"
+            views={["month", "year"]}
+            value={startDate}
+            onChange={(newValue) => {
+              setStartDate(newValue);
+
+              if (newValue?.isValid()) {
+                const start = newValue.format("MMMM YYYY");
+
+                const end = endDate?.isValid()
+                  ? endDate.format("MMMM YYYY")
+                  : "Present";
+
+                // Update end date if it is earlier than the new start date
+                if (endDate && endDate.isBefore(newValue, "month")) {
+                  setEndDate(null);
+                }
+
+                // Use Present if the existing end date is invalidated
+                const validEnd =
+                  endDate?.isValid() && !endDate.isBefore(newValue, "month");
+
+                setValue(
+                  `education.${index}.years`,
+                  `${start} - ${validEnd ? end : "Present"}`,
+                  { shouldValidate: true, shouldDirty: true },
+                );
+              } else {
+                setValue(`education.${index}.years`, "");
+              }
+            }}
+            slotProps={{
+              textField: { fullWidth: true },
+            }}
+          />
+
+          <DatePicker
+            label="End Date"
+            views={["month", "year"]}
+            value={endDate}
+            minDate={startDate ?? undefined}
+            disabled={!startDate}
+            onChange={(newValue) => {
+              setEndDate(newValue);
+
+              if (startDate?.isValid()) {
+                const start = startDate.format("MMMM YYYY");
+
+                const end = newValue?.isValid()
+                  ? newValue.format("MMMM YYYY")
+                  : "Present";
+
+                setValue(`education.${index}.years`, `${start} - ${end}`, {
+                  shouldValidate: true,
+                  shouldDirty: true,
+                });
+              }
+            }}
+            slotProps={{
+              textField: { fullWidth: true },
+            }}
+          />
+        </Stack>
+      </LocalizationProvider>
 
       <TextField
         label="Qualification"

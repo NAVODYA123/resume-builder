@@ -21,10 +21,9 @@ export const Education = ({ education }: EducationProps) => {
         >
           {item.qualification && item.institution && (
             <Typography variant="body2">
-              {item.qualification} - {item.institution}
+              {item.qualification} - {item.institution} - {item.years}
             </Typography>
           )}
-          |{item.years && <Typography variant="body2">{item.years}</Typography>}
         </Box>
       ))}
     </Box>

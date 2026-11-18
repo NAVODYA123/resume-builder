@@ -228,7 +228,7 @@ export const EditorTemplate = () => {
         >
           <Button
             variant="contained"
-            color="success"
+            color="info"
             onClick={() => window.print()}
             sx={{ mt: 2 }}
           >
@@ -257,7 +257,9 @@ export const EditorTemplate = () => {
               overflowY: "auto",
             }}
           >
-            <Typography variant="h5">Resume Editor</Typography>
+            <Typography sx={{}} variant="h5">
+              Resume Editor
+            </Typography>
             <PersonalInformation
               onProfilePictureChange={handleProfilePictureChange}
             />
