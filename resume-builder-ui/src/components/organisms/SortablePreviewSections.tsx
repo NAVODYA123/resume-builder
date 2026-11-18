@@ -20,20 +20,18 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 
 import { Box, IconButton } from "@mui/material";
-
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 
 import type { ReactNode } from "react";
-
 import type { ResumeSectionOrder } from "@/types/resume.types";
 
 interface SortablePreviewSectionsProps {
   sections: ResumeSectionOrder[];
+  pages: ResumeSectionOrder[][];
   onChange: (sections: ResumeSectionOrder[]) => void;
   renderSection: (section: ResumeSectionOrder) => ReactNode;
 }
 
-// Makes an actual preview section draggable
 const SortablePreviewSection = ({
   section,
   children,
@@ -55,6 +53,7 @@ const SortablePreviewSection = ({
   return (
     <Box
       ref={setNodeRef}
+      data-section-id={section.id}
       sx={{
         position: "relative",
         transform: CSS.Transform.toString(transform),
@@ -62,7 +61,6 @@ const SortablePreviewSection = ({
         opacity: isDragging ? 0.5 : 1,
       }}
     >
-      {/* Drag handle */}
       <IconButton
         {...attributes}
         {...listeners}
@@ -89,6 +87,7 @@ const SortablePreviewSection = ({
 
 export const SortablePreviewSections = ({
   sections,
+  pages,
   onChange,
   renderSection,
 }: SortablePreviewSectionsProps) => {
@@ -124,14 +123,21 @@ export const SortablePreviewSections = ({
       onDragEnd={handleDragEnd}
     >
       <SortableContext
-        items={sections.map((section) => section.id)}
+        items={pages.flatMap((page) => page.map((section) => section.id))}
         strategy={verticalListSortingStrategy}
       >
         <Box>
-          {sections.map((section) => (
-            <SortablePreviewSection key={section.id} section={section}>
-              {renderSection(section)}
-            </SortablePreviewSection>
+          {pages.map((pageSections, pageIndex) => (
+            <Box
+              key={`column-page-${pageIndex}`}
+              className="sortable-page-sections"
+            >
+              {pageSections.map((section) => (
+                <SortablePreviewSection key={section.id} section={section}>
+                  {renderSection(section)}
+                </SortablePreviewSection>
+              ))}
+            </Box>
           ))}
         </Box>
       </SortableContext>
