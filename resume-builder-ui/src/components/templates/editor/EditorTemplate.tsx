@@ -15,7 +15,6 @@ import { defaultResumeData } from "@/types/resume.types";
 import { ProfileSummary } from "@/components/molecules/ProfileSummary";
 import { ContactInfo } from "@/components/molecules/ContactInfo";
 
-// import { CustomLeftPanelItem } from "@/components/organisms/CustomLeftPanelItem";
 import { ResumeSection } from "@/components/organisms/ResumeSection";
 import { WorkExperienceContent } from "@/components/organisms/WorkExperienceContent";
 import { CustomRightPanelContent } from "@/components/organisms/CustomRightPanelContent";
@@ -27,7 +26,6 @@ import { CustomLeftPanelContent } from "@/components/organisms/CustomLeftPanelCo
 import { usePaginatedSections } from "@/hooks/usePaginatedSections";
 import { useSectionMeasurements } from "@/hooks/useSectionMeasurements";
 import { ResumeMeasurement } from "@/components/organisms/ResumeMeasurement";
-// import { CustomRightPanelItem } from "@/components/organisms/CustomRightPanelItem";
 
 export const EditorTemplate = () => {
   // Initialize the complete resume form
@@ -218,8 +216,6 @@ export const EditorTemplate = () => {
     console.log("Complete Resume:", data);
   };
 
-  // const personalInfo = resumeData.personalInformation;
-
   return (
     <FormProvider {...methods}>
       <Box
@@ -254,40 +250,6 @@ export const EditorTemplate = () => {
             Save Resume
           </Button>
         </Box>
-
-        {/* RIGHT COLUMN - LIVE RESUME PREVIEW
-        <Box sx={{ backgroundColor: "#656161" }}>
-          <VerticalColumnTemplate
-            name={personalInfo?.fullName || ""}
-            title={personalInfo?.jobTitle || ""}
-            isFirstPage={true}
-            profilePicture={personalInfo?.profilePicture ?? null}
-            leftContent={
-              <SortablePreviewSections
-                sections={leftSectionOrder || []}
-                pages={[leftSectionOrder || []]}
-                onChange={(updatedSections) => {
-                  setValue("leftSectionOrder", updatedSections, {
-                    shouldDirty: true,
-                  });
-                }}
-                renderSection={renderPreviewLeftSection}
-              />
-            }
-            rightContent={
-              <SortablePreviewSections
-                sections={sectionOrder || []}
-                pages={[sectionOrder || []]}
-                onChange={(updatedSections) => {
-                  setValue("sectionOrder", updatedSections, {
-                    shouldDirty: true,
-                  });
-                }}
-                renderSection={renderPreviewSection}
-              />
-            }
-          />
-        </Box> */}
 
         {/* RIGHT COLUMN - LIVE RESUME PREVIEW */}
         <Box

@@ -91,27 +91,6 @@ export const VerticalColumnTemplate = ({
 
         {/* Right Column */}
         <Box
-          // sx={{
-          //   width: "70%",
-          //   boxSizing: "border-box",
-          //   backgroundColor: "#ffffff",
-          //   pt: isFirstPage ? "250px" : "30px",
-          //   px: "20px",
-          //   pb: 3,
-
-          //   "& .MuiTypography-h6": {
-          //     color: "#163853",
-          //   },
-
-          //   "& .MuiDivider-root": {
-          //     borderColor: "#163853",
-          //     borderBottomWidth: "2px",
-          //   },
-
-          //   "& .resume-company-position": {
-          //     color: "#235f8e",
-          //   },
-          // }}
           sx={{
             width: "70%",
             boxSizing: "border-box",
