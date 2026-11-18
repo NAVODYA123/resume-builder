@@ -218,96 +218,108 @@ export const EditorTemplate = () => {
 
   return (
     <FormProvider {...methods}>
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: "30% 70%",
-          gap: 3,
-          p: 2,
-          alignItems: "start",
-        }}
-      >
-        {/* LEFT COLUMN - EDITOR */}
+      <Box>
+        <Button
+          variant="contained"
+          color="success"
+          onClick={() => window.print()}
+          sx={{ mt: 2 }}
+        >
+          Export as PDF
+        </Button>
         <Box
-          component="form"
-          onSubmit={handleSubmit(onSubmit)}
           sx={{
-            display: "flex",
-            flexDirection: "column",
+            display: "grid",
+            gridTemplateColumns: "30% 70%",
             gap: 3,
+            p: 2,
+            alignItems: "start",
           }}
         >
-          <Typography variant="h5">Resume Editor</Typography>
-          <PersonalInformation
-            onProfilePictureChange={handleProfilePictureChange}
-          />
-          <WorkExperienceEditor />
-          <EducationEditor />
-          <CustomRightPanelItemEditor />
-          <CustomLeftPanelItemEditor />
-
-          <Button type="submit" variant="contained">
-            Save Resume
-          </Button>
-        </Box>
-
-        {/* RIGHT COLUMN - LIVE RESUME PREVIEW */}
-        <Box
-          sx={{
-            backgroundColor: "#656161",
-            position: "relative",
-          }}
-        >
-          {/* Hidden left-column measurements */}
-          <ResumeMeasurement
-            sections={leftSectionOrder || []}
-            renderSection={renderPreviewLeftSection}
-            column="left"
-            containerRef={leftMeasurementRef}
-          />
-
-          {/* Hidden right-column measurements */}
-          <ResumeMeasurement
-            sections={sectionOrder || []}
-            renderSection={renderPreviewSection}
-            column="right"
-            containerRef={rightMeasurementRef}
-          />
-
-          {/* Actual resume pages */}
-          {Array.from({ length: totalPages }, (_, pageIndex) => (
-            <VerticalColumnTemplate
-              key={`resume-page-${pageIndex}`}
-              name={personalInfo?.fullName || ""}
-              title={personalInfo?.jobTitle || ""}
-              profilePicture={personalInfo?.profilePicture ?? null}
-              isFirstPage={pageIndex === 0}
-              leftContent={
-                <SortablePreviewSections
-                  sections={leftSectionOrder || []}
-                  pages={[leftPages[pageIndex] || []]}
-                  onChange={(updatedSections) => {
-                    setValue("leftSectionOrder", updatedSections, {
-                      shouldDirty: true,
-                    });
-                  }}
-                  renderSection={renderPreviewLeftSection}
-                />
-              }
-              rightContent={
-                <SortablePreviewSections
-                  sections={sectionOrder || []}
-                  pages={[rightPages[pageIndex] || []]}
-                  onChange={(updatedSections) => {
-                    setValue("sectionOrder", updatedSections, {
-                      shouldDirty: true,
-                    });
-                  }}
-                  renderSection={renderPreviewSection}
-                />
-              }
+          {/* LEFT COLUMN - EDITOR */}
+          <Box
+            component="form"
+            onSubmit={handleSubmit(onSubmit)}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 3,
+            }}
+          >
+            <Typography variant="h5">Resume Editor</Typography>
+            <PersonalInformation
+              onProfilePictureChange={handleProfilePictureChange}
             />
-          ))}
+            <WorkExperienceEditor />
+            <EducationEditor />
+            <CustomRightPanelItemEditor />
+            <CustomLeftPanelItemEditor />
+
+            <Button type="submit" variant="contained">
+              Save Resume
+            </Button>
+          </Box>
+
+          {/* RIGHT COLUMN - LIVE RESUME PREVIEW */}
+          <Box
+            className="resume-preview"
+            // ref={resumeRef}
+            sx={{
+              backgroundColor: "#656161",
+              position: "relative",
+            }}
+          >
+            {/* Hidden left-column measurements */}
+            <ResumeMeasurement
+              sections={leftSectionOrder || []}
+              renderSection={renderPreviewLeftSection}
+              column="left"
+              containerRef={leftMeasurementRef}
+            />
+
+            {/* Hidden right-column measurements */}
+            <ResumeMeasurement
+              sections={sectionOrder || []}
+              renderSection={renderPreviewSection}
+              column="right"
+              containerRef={rightMeasurementRef}
+            />
+
+            {/* Actual resume pages */}
+            {Array.from({ length: totalPages }, (_, pageIndex) => (
+              <VerticalColumnTemplate
+                key={`resume-page-${pageIndex}`}
+                name={personalInfo?.fullName || ""}
+                title={personalInfo?.jobTitle || ""}
+                profilePicture={personalInfo?.profilePicture ?? null}
+                isFirstPage={pageIndex === 0}
+                leftContent={
+                  <SortablePreviewSections
+                    sections={leftSectionOrder || []}
+                    pages={[leftPages[pageIndex] || []]}
+                    onChange={(updatedSections) => {
+                      setValue("leftSectionOrder", updatedSections, {
+                        shouldDirty: true,
+                      });
+                    }}
+                    renderSection={renderPreviewLeftSection}
+                  />
+                }
+                rightContent={
+                  <SortablePreviewSections
+                    sections={sectionOrder || []}
+                    pages={[rightPages[pageIndex] || []]}
+                    onChange={(updatedSections) => {
+                      setValue("sectionOrder", updatedSections, {
+                        shouldDirty: true,
+                      });
+                    }}
+                    renderSection={renderPreviewSection}
+                  />
+                }
+              />
+            ))}
+          </Box>
         </Box>
       </Box>
     </FormProvider>

@@ -21,6 +21,7 @@ export const VerticalColumnTemplate = ({
 }: VerticalColumnTemplateProps) => {
   return (
     <Paper
+      className="resume-page"
       elevation={4}
       sx={{
         width: "210mm",
