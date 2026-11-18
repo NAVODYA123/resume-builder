@@ -219,14 +219,23 @@ export const EditorTemplate = () => {
   return (
     <FormProvider {...methods}>
       <Box>
-        <Button
-          variant="contained"
-          color="success"
-          onClick={() => window.print()}
-          sx={{ mt: 2 }}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "flex-end",
+          }}
         >
-          Export as PDF
-        </Button>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={() => window.print()}
+            sx={{ mt: 2 }}
+          >
+            Export as PDF
+          </Button>
+        </Box>
+
         <Box
           sx={{
             display: "grid",
