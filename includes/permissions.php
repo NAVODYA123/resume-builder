@@ -16,5 +16,11 @@ function rbp_user_can_manage_resume( $resume_id ) {
         return false;
     }
 
-    return current_user_can( 'edit_post', $resume_id );
+    // Allow the resume owner.
+    if ( (int) $resume->post_author === get_current_user_id() ) {
+        return true;
+    }
+
+    // Allow WordPress administrators.
+    return current_user_can( 'manage_options' );
 }

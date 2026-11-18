@@ -62,6 +62,21 @@ function rbp_enqueue_react_app() {
         true
     );
 
+
+    // Pass WordPress API configuration to React.
+wp_localize_script(
+    'rbp-react-app',
+    'rbpApiSettings',
+    array(
+        'apiUrl' => esc_url_raw(
+            rest_url( 'navos-resume/v1/' )
+        ),
+        'nonce' => wp_create_nonce( 'wp_rest' ),
+    )
+);
+
+    
+
     // 4. Load JavaScript as an ES module.
     add_filter(
         'script_loader_tag',

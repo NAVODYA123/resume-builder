@@ -1,5 +1,3 @@
-// import { generateId } from "@/utils/generateId";
-
 export interface PersonalInformationData {
   fullName: string;
   jobTitle: string;
@@ -9,6 +7,28 @@ export interface PersonalInformationData {
   summary: string;
   profilePicture: File | null;
   linkedin: string;
+}
+
+// Data structure used when saving to the database
+export interface SavedPersonalInformationData extends Omit<
+  PersonalInformationData,
+  "profilePicture"
+> {
+  profilePicture: number | null;
+}
+
+export interface SavedResumeData extends Omit<
+  ResumeData,
+  "personalInformation"
+> {
+  personalInformation: SavedPersonalInformationData;
+}
+
+export interface SavedResume {
+  id: number;
+  title: string;
+  resumeData: SavedResumeData;
+  modified: string;
 }
 
 export interface WorkDescriptionData {
