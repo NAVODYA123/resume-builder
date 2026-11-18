@@ -30,26 +30,6 @@ export const ResumeMeasurement = ({
       }}
     >
       <Box
-        // sx={{
-        //   display: isLeft ? "flex" : "block",
-        //   flexDirection: "column",
-        //   gap: isLeft ? 2 : 0,
-        //   width: "100%",
-        //   boxSizing: "border-box",
-
-        //   "& *": isLeft ? { color: "#ffffff" } : {},
-
-        //   "& .MuiTypography-h6": isLeft ? {} : { color: "#163853" },
-
-        //   "& .MuiDivider-root": {
-        //     borderColor: isLeft ? "#ffffff" : "#163853",
-        //     borderBottomWidth: "2px",
-        //   },
-
-        //   "& .resume-company-position": {
-        //     color: "#235f8e",
-        //   },
-        // }}
         sx={{
           display: "flex",
           flexDirection: "column",
