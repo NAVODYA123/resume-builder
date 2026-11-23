@@ -1,8 +1,14 @@
+import { countryOptions } from "@/utils/countries";
+import type { CountryOption } from "./countries.types";
+
 export interface PersonalInformationData {
   fullName: string;
   jobTitle: string;
   email: string;
-  phone: string;
+  phone: {
+    country: CountryOption | null;
+    number: string;
+  };
   address: string;
   summary: string;
   profilePicture: File | null;
@@ -96,7 +102,10 @@ export const defaultResumeData: ResumeData = {
     fullName: "",
     jobTitle: "",
     email: "",
-    phone: "",
+    phone: {
+      country: countryOptions.find((item) => item.code === "LK") ?? null,
+      number: "",
+    },
     address: "",
     summary: "",
     profilePicture: null,
