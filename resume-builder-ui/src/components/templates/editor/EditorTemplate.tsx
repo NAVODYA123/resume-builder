@@ -172,7 +172,11 @@ export const EditorTemplate = () => {
           <ResumeSection title="Contact Information">
             <ContactInfo
               email={personalInfo?.email || ""}
-              phone={personalInfo?.phone || ""}
+              phone={
+                personalInfo?.phone
+                  ? `${personalInfo.phone.country?.dialCode ?? ""} ${personalInfo.phone.number}`
+                  : ""
+              }
               address={personalInfo?.address || ""}
               linkedin={personalInfo?.linkedin || ""}
             />

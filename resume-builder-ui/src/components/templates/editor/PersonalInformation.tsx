@@ -1,9 +1,10 @@
-import { useFormContext } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 
 import { Button, Stack, TextField, Typography } from "@mui/material";
 
 import type { ResumeData } from "@/types/resume.types";
 import { ProfilePicture } from "@/components/molecules/ProfilePicture";
+import { PhoneInput } from "@/components/molecules/PhoneInput";
 
 interface PersonalInformationProps {
   onProfilePictureChange: (file: File | null) => void;
@@ -16,6 +17,7 @@ export const PersonalInformation = ({
     register,
     setValue,
     watch,
+    control,
     formState: { errors },
   } = useFormContext<ResumeData>();
 
@@ -51,19 +53,9 @@ export const PersonalInformation = ({
   return (
     <Stack spacing={3}>
       <Typography variant="h6">Personal Information</Typography>
-
       {/* Profile Picture */}
       <Stack spacing={1}>
         <ProfilePicture profilePicture={profilePicture} />
-        {/* <Avatar
-          src={
-            profilePicture instanceof File
-              ? URL.createObjectURL(profilePicture)
-              : undefined
-          }
-          sx={{ width: 80, height: 80 }}
-        /> */}
-
         <Button component="label" variant="outlined">
           Upload Picture
           <input
@@ -74,7 +66,6 @@ export const PersonalInformation = ({
           />
         </Button>
       </Stack>
-
       <TextField
         label="Full Name"
         fullWidth
@@ -84,31 +75,55 @@ export const PersonalInformation = ({
         error={!!personalInfoErrors?.fullName}
         helperText={personalInfoErrors?.fullName?.message}
       />
-
       <TextField
         label="Professional Title"
         fullWidth
         {...register("personalInformation.jobTitle")}
+        error={!!personalInfoErrors?.jobTitle}
+        helperText={personalInfoErrors?.jobTitle?.message}
       />
-
       <TextField
         label="Email Address"
         fullWidth
         {...register("personalInformation.email")}
+        error={!!personalInfoErrors?.email}
+        helperText={personalInfoErrors?.email?.message}
       />
 
-      <TextField
-        label="Phone Number"
-        fullWidth
-        {...register("personalInformation.phone")}
-      />
+      {/* Phone Number */}
+      <Controller
+        name="personalInformation.phone"
+        control={control}
+        rules={{
+          validate: (value) =>
+            value?.number?.trim() || "Phone number is required",
+        }}
+        render={({ field, fieldState }) => (
+          <Stack spacing={0.5}>
+            <PhoneInput
+              country={field.value?.country ?? null}
+              phone={field.value?.number ?? ""}
+              onCountryChange={(country) =>
+                field.onChange({ ...field.value, country })
+              }
+              onPhoneChange={(number) =>
+                field.onChange({ ...field.value, number })
+              }
+            />
 
+            {fieldState.error && (
+              <Typography variant="caption" color="error">
+                {fieldState.error.message}
+              </Typography>
+            )}
+          </Stack>
+        )}
+      />
       <TextField
         label="Address"
         fullWidth
         {...register("personalInformation.address")}
       />
-
       <TextField
         label="Professional Summary"
         multiline
@@ -116,7 +131,6 @@ export const PersonalInformation = ({
         fullWidth
         {...register("personalInformation.summary")}
       />
-
       <TextField
         label="Linkedin"
         fullWidth
