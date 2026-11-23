@@ -123,6 +123,8 @@ export const PersonalInformation = ({
         label="Address"
         fullWidth
         {...register("personalInformation.address")}
+        error={!!personalInfoErrors?.address}
+        helperText={personalInfoErrors?.address?.message}
       />
       <TextField
         label="Professional Summary"
@@ -130,11 +132,15 @@ export const PersonalInformation = ({
         rows={4}
         fullWidth
         {...register("personalInformation.summary")}
+        error={!!personalInfoErrors?.summary}
+        helperText={personalInfoErrors?.summary?.message}
       />
       <TextField
         label="Linkedin"
         fullWidth
         {...register("personalInformation.linkedin")}
+        error={!!personalInfoErrors?.linkedin}
+        helperText={personalInfoErrors?.linkedin?.message}
       />
     </Stack>
   );

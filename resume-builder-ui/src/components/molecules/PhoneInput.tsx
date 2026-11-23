@@ -1,9 +1,10 @@
-import { Autocomplete, Stack, TextField } from "@mui/material";
+import { Autocomplete, InputAdornment, Stack, TextField } from "@mui/material";
 
 import ReactCountryFlag from "react-country-flag";
 
 import { countryOptions } from "@/utils/countries";
 import type { CountryOption } from "@/types/countries.types";
+import { useState } from "react";
 
 interface PhoneInputProps {
   country: CountryOption | null;
@@ -18,9 +19,14 @@ export const PhoneInput = ({
   onCountryChange,
   onPhoneChange,
 }: PhoneInputProps) => {
+  const [inputValue, setInputValue] = useState("");
   return (
     <Stack direction="row" spacing={1}>
       <Autocomplete
+        inputValue={inputValue}
+        onInputChange={(_, newValue, reason) => {
+          setInputValue(reason === "input" ? newValue : "");
+        }}
         options={countryOptions}
         value={country}
         onChange={(_, value) => onCountryChange(value)}
@@ -34,7 +40,29 @@ export const PhoneInput = ({
             </Stack>
           </li>
         )}
-        renderInput={(params) => <TextField {...params} label="Country" />}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label="Country"
+            slotProps={{
+              ...params.slotProps,
+              input: {
+                ...params.slotProps.input,
+                startAdornment: (
+                  <>
+                    {country && !inputValue && (
+                      <InputAdornment position="start">
+                        <ReactCountryFlag countryCode={country.code} svg />
+                        <span>{country.dialCode}</span>
+                      </InputAdornment>
+                    )}
+                    {params.slotProps.input.startAdornment}
+                  </>
+                ),
+              },
+            }}
+          />
+        )}
         sx={{ width: 190 }}
       />
 

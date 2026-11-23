@@ -57,9 +57,9 @@ const personalInformationSchema = z.object({
 
   phone: phoneSchema,
 
-  address: z.string(),
+  address: z.string().min(1, "Address is required"),
 
-  summary: z.string(),
+  summary: z.string().min(1, "Summary is required"),
 
   profilePicture: z.instanceof(File).nullable(),
 
