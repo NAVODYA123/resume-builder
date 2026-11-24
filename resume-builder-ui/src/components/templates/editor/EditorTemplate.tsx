@@ -31,11 +31,15 @@ import { usePaginatedSections } from "@/hooks/usePaginatedSections";
 import { useSectionMeasurements } from "@/hooks/useSectionMeasurements";
 import { ResumeMeasurement } from "@/components/organisms/ResumeMeasurement";
 import { saveResume, updateResume } from "@/services/resumeService";
+import { resumeSchema } from "@/schemas/resume.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export const EditorTemplate = () => {
   // Initialize the complete resume form
   const methods = useForm<ResumeData>({
+    resolver: zodResolver(resumeSchema),
     defaultValues: defaultResumeData,
+    mode: "onChange",
   });
 
   const [resumeId, setResumeId] = useState<number | null>(null);
@@ -172,7 +176,11 @@ export const EditorTemplate = () => {
           <ResumeSection title="Contact Information">
             <ContactInfo
               email={personalInfo?.email || ""}
-              phone={personalInfo?.phone || ""}
+              phone={
+                personalInfo?.phone
+                  ? `${personalInfo.phone.country?.dialCode ?? ""} ${personalInfo.phone.number}`
+                  : ""
+              }
               address={personalInfo?.address || ""}
               linkedin={personalInfo?.linkedin || ""}
             />
